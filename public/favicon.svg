@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Balancil">
+  <rect width="64" height="64" rx="14.5" fill="#C8F24A"/>
+  <g transform="scale(1.3333333)" fill="#13211C">
+    <path d="M9.3 8.1H14.5V34.5H29.2A4.15 4.15 0 0 0 29.2 26.2H17.1V21H29.2A9.35 9.35 0 0 1 29.2 39.7H9.3Z"/>
+    <path d="M17.1 13.6H27.9A2.6 2.6 0 0 1 27.9 18.8H17.1Z"/>
+  </g>
+</svg>
