@@ -3,8 +3,7 @@ import { Alert, Upload } from '../../components/icons';
 import { Button, LedgerList, LedgerRow, Modal, StatusPill, useToast } from '../../components/ui';
 import { useTransactionImport } from '../../hooks/useFinance';
 import type { TransactionImportReview } from '../../types';
-import { formatCurrency } from '../../utils/finance';
-import { formatDate } from './format';
+import { formatCurrency, formatLedgerDate } from '../../utils/finance';
 
 const TEMPLATE_COLUMNS = 'date, merchant, description, category, account, type, status, amount';
 
@@ -58,7 +57,7 @@ export function TransactionImportModal({ onClose }: { onClose: () => void }) {
       description="Read a CSV file into your ledger. Nothing is saved until you confirm."
     >
       <div className="import-panel">
-        <label className="field-control">
+        <label className="field-control import-file">
           CSV file
           <input
             ref={fileInput}
@@ -121,7 +120,8 @@ export function TransactionImportModal({ onClose }: { onClose: () => void }) {
                     <span>
                       <strong>{row.merchant}</strong>
                       <small>
-                        {row.date ? formatDate(row.date) : ''} · {row.category} · {row.account}
+                        {row.date ? formatLedgerDate(row.date) : ''} · {row.category} ·{' '}
+                        {row.account}
                       </small>
                     </span>
                     {row.duplicate ? <StatusPill tone="neutral">Already added</StatusPill> : null}

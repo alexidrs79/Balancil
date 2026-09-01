@@ -2,8 +2,7 @@ import { Copy, Pencil, Trash } from '../../components/icons';
 import { Button, LedgerList, LedgerRow, StatusPill } from '../../components/ui';
 import { CategoryMark } from '../../components/visuals';
 import type { Account, Category, Transaction } from '../../types';
-import { formatCurrency } from '../../utils/finance';
-import { formatDate } from './format';
+import { formatCurrency, formatLedgerDate } from '../../utils/finance';
 
 function statusTone(status: Transaction['status']) {
   if (status === 'failed') return 'negative';
@@ -67,7 +66,7 @@ export function TransactionTable({
                 <small>{transaction.description}</small>
                 <span>
                   {category?.name ?? 'Other'} · {account?.name ?? 'Unknown'} ·{' '}
-                  <time dateTime={transaction.date}>{formatDate(transaction.date)}</time>
+                  <time dateTime={transaction.date}>{formatLedgerDate(transaction.date)}</time>
                 </span>
               </div>
               <StatusPill tone={statusTone(transaction.status)}>{transaction.status}</StatusPill>

@@ -1,7 +1,35 @@
 import type { Budget, BudgetStatus, Goal, TransactionFilters } from '../types';
-import { formatDateInput } from './currency';
+import { formatDate, formatDateInput } from './currency';
 
 export { formatCompactCurrency, formatCurrency, formatDate, formatDateInput } from './currency';
+
+export const chartColors = {
+  income: 'var(--chart-income)',
+  expense: 'var(--chart-expense)',
+};
+
+export function formatLedgerDate(value: string) {
+  return formatDate(value, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+export function formatShortDate(value: string) {
+  return formatDate(value, {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+export function formatAnalyticsMonth(value: string, includeYear: boolean) {
+  if (!/^\d{4}-\d{2}$/.test(value)) return value;
+  return formatDate(`${value}-01`, {
+    month: 'short',
+    year: includeYear ? '2-digit' : undefined,
+  });
+}
 
 export const budgetPercentage = (budget: Pick<Budget, 'spent' | 'limit'>) =>
   budget.limit <= 0 ? 0 : Math.round((budget.spent / budget.limit) * 100);

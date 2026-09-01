@@ -2,8 +2,7 @@ import { Button, useToast } from '../../components/ui';
 import { CategoryMark } from '../../components/visuals';
 import { useRecurringMutations } from '../../hooks/useFinance';
 import type { Account, Category, RecurringDueDraft } from '../../types';
-import { formatCurrency } from '../../utils/finance';
-import { formatDate } from './format';
+import { formatCurrency, formatLedgerDate } from '../../utils/finance';
 
 /** Due recurring items wait here; nothing reaches the ledger without approval. */
 export function RecurringDuePanel({
@@ -45,7 +44,7 @@ export function RecurringDuePanel({
               <div>
                 <strong>{draft.payload.merchant}</strong>
                 <small>
-                  Due {formatDate(draft.dueDate)} · {account?.name ?? 'Unknown account'} ·{' '}
+                  Due {formatLedgerDate(draft.dueDate)} · {account?.name ?? 'Unknown account'} ·{' '}
                   {category?.name ?? 'Unknown category'}
                 </small>
               </div>

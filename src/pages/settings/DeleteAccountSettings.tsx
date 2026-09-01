@@ -26,18 +26,20 @@ export function DeleteAccountSettings({
           cannot be undone.
         </p>
       </header>
-      <label className="form-toggle">
-        <input
-          type="checkbox"
-          checked={confirming}
-          onChange={(event) => setConfirming(event.target.checked)}
-        />
-        <span>I understand this cannot be undone</span>
-      </label>
-      <label className="field-control">
-        Password
-        <input name="password" type="password" required autoComplete="current-password" />
-      </label>
+      <div className="settings-field-stack">
+        <label className="form-toggle">
+          <input
+            type="checkbox"
+            checked={confirming}
+            onChange={(event) => setConfirming(event.target.checked)}
+          />
+          <span>I understand this cannot be undone</span>
+        </label>
+        <label className="field-control">
+          Password
+          <input name="password" type="password" required autoComplete="current-password" />
+        </label>
+      </div>
       <footer className="settings-actions">
         <Button type="submit" variant="danger" disabled={saving || !confirming}>
           {saving ? 'Deleting…' : 'Delete my account'}

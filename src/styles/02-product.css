@@ -973,6 +973,26 @@
   font-size: var(--text-2xs);
 }
 
+/* Every settings panel is a heading, one or more content blocks, and an action
+   footer. The rhythm lives here so a panel does not have to fake the gap under
+   the heading rule with padding on whichever child happens to come first. */
+.settings-form,
+.settings-subform {
+  display: grid;
+  /* minmax, not the implicit `auto`: a long session user agent would otherwise
+     size the track past the panel and push the row actions out of view. */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--space-6);
+}
+
+/* Two controls that answer the same question read as one block, so they sit
+   closer than the gap between blocks. */
+.settings-field-stack {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .settings-panel-heading {
   padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--border);
@@ -993,7 +1013,6 @@
 }
 
 .settings-resource-list {
-  padding-top: var(--space-5);
   display: grid;
   gap: var(--space-2);
 }
@@ -1038,14 +1057,15 @@
   transform: translateX(3px);
 }
 
+/* The grid gap already supplies the space above the rule; only the space below
+   it is this element's to add. */
 .settings-subform + .settings-subform {
-  margin-top: var(--space-6);
   padding-top: var(--space-6);
   border-top: 1px solid var(--border);
 }
 
 .profile-photo-setting {
-  padding: var(--space-5) 0;
+  padding-bottom: var(--space-6);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -1126,10 +1146,6 @@
   font-size: var(--text-xs);
 }
 
-.session-list {
-  padding-block: var(--space-4);
-}
-
 .session-list article {
   min-height: 76px;
   padding: var(--space-4) 0;
@@ -1168,7 +1184,6 @@
 }
 
 .settings-field-grid {
-  padding: var(--space-6) 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
@@ -1335,40 +1350,93 @@
   gap: var(--space-2);
 }
 
-/* Transaction import ------------------------------------------------------ */
-
-.import-panel {
-  display: grid;
-  gap: var(--space-4);
+/* Every ledger list is a bare list; without this a list rendered outside one of
+   the named page variants keeps the browser's bullet indent. */
+.ledger-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.import-panel input[type='file'] {
+/* Transaction import ------------------------------------------------------ */
+
+/* Padding, scroll containment, and the field gap all come from the shared
+   `.modal > *` body rules this class is listed in. */
+.import-panel {
+  display: grid;
+  align-content: start;
+}
+
+/* The native control is replaced by a bordered field that matches the other
+   inputs, with only its button chrome restyled so the file picker still works. */
+.import-file input[type='file'] {
   width: 100%;
+  min-width: 0;
+  min-height: var(--control-md);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.import-file input[type='file']:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+.import-file input[type='file']::file-selector-button {
+  margin-right: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface-subtle);
+  color: var(--text);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.import-file input[type='file']::file-selector-button:hover {
+  background: var(--surface-hover);
 }
 
 .import-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-2);
+  gap: var(--space-3);
   margin: 0;
 }
 
 .import-summary > div {
-  padding: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4) var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  display: grid;
+  gap: var(--space-1);
+  justify-items: center;
   text-align: center;
 }
 
 .import-summary dt {
-  font-size: 0.75rem;
   color: var(--muted);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .import-summary dd {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1376,46 +1444,95 @@
   color: var(--negative);
 }
 
-.import-problems > p {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--negative);
-  margin-bottom: var(--space-2);
+.import-problems {
+  padding: var(--space-4);
+  border: 1px solid var(--negative);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: var(--space-3);
+  background: color-mix(in srgb, var(--negative) 6%, var(--surface));
 }
 
-.import-problems .ledger-row,
-.import-preview .ledger-row {
+.import-problems > p {
+  margin: 0;
   display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--negative);
+  font-size: var(--text-xs);
+  line-height: var(--leading-body);
+}
+
+.import-problems > p > svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* Rows are a two-column grid so the amount and the copy never collide, and the
+   copy is free to wrap without pushing the figure off the row. */
+.import-preview .ledger-row,
+.import-problems .ledger-row {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--space-3);
-  flex-wrap: wrap;
+}
+
+.import-preview .ledger-row:last-child,
+.import-problems .ledger-row:last-child {
+  border-bottom: 0;
+}
+
+.import-preview .ledger-row > span:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.import-preview .ledger-row strong {
+  font-size: var(--text-xs);
+}
+
+.import-preview .ledger-row small,
+.import-problems .ledger-row small {
+  color: var(--muted);
+  font-size: var(--text-caption);
+  overflow-wrap: anywhere;
+}
+
+/* A duplicate row carries a pill between the copy and the amount, so it needs a
+   third track rather than wrapping the figure onto its own line. */
+.import-preview .ledger-row:has(.status-pill) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.import-preview .status-pill {
+  flex: none;
+}
+
+.import-preview .money-value {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.import-problems .ledger-row {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+.import-problems .ledger-row strong {
+  font-size: var(--text-xs);
 }
 
 .import-problems .ledger-row small {
   color: var(--negative);
 }
 
-.import-problems .ledger-row > span:not(:last-child),
-.import-preview .ledger-row > span:first-child {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.import-preview .ledger-row > span:first-child {
-  display: grid;
-}
-
-.import-preview .money-value {
-  margin-left: auto;
-  font-variant-numeric: tabular-nums;
-}
-
-.import-problems .ledger-list,
-.import-preview {
-  max-height: 240px;
-  overflow-y: auto;
-}
+/* Both lists are already capped to a handful of rows in the component, so the
+   modal body stays the only scroll region rather than nesting a second one. */
 
 .category-manager-list {
   overflow-y: auto;
@@ -1541,6 +1658,7 @@
 }
 
 .modal > .form-grid,
+.modal > .import-panel,
 .modal > .confirmation {
   min-height: 0;
   overflow-y: auto;
@@ -1554,6 +1672,7 @@
 }
 
 .modal > .form-grid,
+.modal > .import-panel,
 .modal .category-manager-form {
   padding: var(--modal-gutter);
 }
@@ -1564,7 +1683,8 @@
    edge without a negative bottom margin. A negative margin there is counted by the
    footer's `bottom: 0` sticky constraint and hoists it up out of its grid row,
    swallowing the gap above it. */
-.modal .form-grid {
+.modal .form-grid,
+.modal .import-panel {
   gap: var(--modal-field-gap);
   padding-bottom: 0;
 }

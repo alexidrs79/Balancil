@@ -25,12 +25,12 @@ import {
   initialGoals,
   initialTransactions,
 } from '../data/mockData';
-import { budgetPercentage, formatCurrency, goalProgress } from '../utils/finance';
+import { budgetPercentage, formatCurrency, formatShortDate, goalProgress } from '../utils/finance';
 
 const totalBalance = accounts.reduce((total, account) => total + account.balance, 0);
 const previewAccounts = accounts.slice(0, 3);
 const previewTransactions = initialTransactions.slice(0, 3);
-const previewBudget = initialBudgets[1];
+const previewBudget = initialBudgets[0];
 const previewGoal = initialGoals[0];
 
 const expenseTotal =
@@ -56,13 +56,6 @@ const spendingByCategory = categories
   .filter((category) => category.spent > 0)
   .sort((a, b) => b.spent - a.spent)
   .slice(0, 4);
-
-function transactionDate(value: string) {
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
-}
 
 /**
  * Section photography is brand texture sitting beside copy that already makes the
@@ -352,7 +345,7 @@ export function LandingPage() {
               const category = categories.find((item) => item.id === transaction.categoryId);
               return (
                 <div key={transaction.id}>
-                  <time dateTime={transaction.date}>{transactionDate(transaction.date)}</time>
+                  <time dateTime={transaction.date}>{formatShortDate(transaction.date)}</time>
                   <span>
                     <strong>{transaction.merchant}</strong>
                     <small>{category?.name}</small>

@@ -9,8 +9,7 @@ import type {
   RecurringTransaction,
   Transaction,
 } from '../../types';
-import { formatCurrency, formatDateInput } from '../../utils/finance';
-import { formatDate } from './format';
+import { formatCurrency, formatDateInput, formatLedgerDate } from '../../utils/finance';
 
 export function RecurringManager({
   accounts,
@@ -131,7 +130,7 @@ export function RecurringManager({
                     <small>
                       {formatCurrency(template.amount)} · Every{' '}
                       {template.interval > 1 ? `${template.interval} ` : ''}
-                      {template.frequency} · Next {formatDate(template.nextDueDate)}
+                      {template.frequency} · Next {formatLedgerDate(template.nextDueDate)}
                     </small>
                   </div>
                   <StatusPill tone={template.isActive ? 'positive' : 'neutral'}>

@@ -5,6 +5,9 @@ import {
   budgetStatus,
   formatDate,
   formatDateInput,
+  formatLedgerDate,
+  formatShortDate,
+  formatAnalyticsMonth,
   goalProgress,
   hiddenTransactionFilterCount,
   relativeBarWidth,
@@ -36,6 +39,14 @@ describe('date formatting', () => {
     expect(formatDate('2026-09-01', { year: 'numeric', month: '2-digit', day: '2-digit' })).toBe(
       '09/01/2026',
     );
+  });
+
+  it('formats ledger and chart dates without inventing a timezone shift', () => {
+    expect(formatLedgerDate('2026-09-01')).toBe('Sep 1, 2026');
+    expect(formatShortDate('2026-09-01')).toBe('Sep 1');
+    expect(formatAnalyticsMonth('2026-09', false)).toBe('Sep');
+    expect(formatAnalyticsMonth('2026-09', true)).toBe('Sep 26');
+    expect(formatAnalyticsMonth('not-a-month', false)).toBe('not-a-month');
   });
 });
 

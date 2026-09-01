@@ -26,12 +26,25 @@ Sanctum bearer tokens.
 - Laravel 13, Sanctum bearer tokens, SQLite by default
 - Vitest, Testing Library, PHPUnit
 
-## Local setup
+## Run it locally
 
-Requirements: Node.js, PHP 8.3 or newer, Composer, and the PHP SQLite extension.
+You need **two processes**: the Laravel API on port 8000, and the Vite app on port 5173. If only the app is running, the page loads but sign-in fails.
+
+### Requirements
+
+- Node.js 22 or newer
+- PHP 8.3 or newer, with the SQLite extension
+- Composer
+
+On macOS with Homebrew: `brew install node php composer`. Confirm SQLite with `php -m | grep -i sqlite`.
+
+### First-time setup
+
+From the project root:
 
 ```bash
 npm install
+
 cd backend
 composer install
 cp .env.example .env
@@ -44,23 +57,38 @@ Do **not** seed on a machine that will be exposed. `php artisan db:seed` creates
 local-only demo user (`alex@balancil.app` / `balancil123`) and is skipped unless
 `APP_ENV=local`.
 
-Run the API and frontend in separate terminals:
+### Every time you develop
+
+Open **two terminals**.
+
+Terminal 1 — API:
 
 ```bash
-cd backend && php artisan serve
+cd backend
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+Leave this running. You should see `http://127.0.0.1:8000`.
+
+Terminal 2 — app:
+
+```bash
 npm run dev
 ```
 
-The frontend is `http://localhost:5173` and proxies `/api` to `http://127.0.0.1:8000`.
-If the frontend uses another port, set `FRONTEND_URL` in `backend/.env` so CORS and
-password-reset links match. A deployed frontend should set `VITE_API_URL` to the
-public API origin and `VITE_SITE_URL` to its own public origin.
+Open **http://localhost:5173**. Vite proxies `/api` to the Laravel server. Keep `FRONTEND_URL=http://localhost:5173` in `backend/.env` so CORS and password-reset links match. If Vite picks another port, change `FRONTEND_URL` to that origin and restart `php artisan serve`.
 
-Local mail uses the log mailer. Password-reset links are written to
-`backend/storage/logs/laravel.log`.
+Create an account from **Create an account**, or use the demo user if you seeded.
 
-Newly registered users receive default categories and a USD display currency, and
-no accounts or history.
+To stop: Ctrl+C in both terminals.
+
+### If sign-in fails
+
+The app can still open while the API is down. Start `php artisan serve` first, then reload the tab. Local mail uses the log driver: password-reset links are written to `backend/storage/logs/laravel.log`.
+
+Newly registered users get default categories and a USD display currency, and no accounts or history.
+
+A production build should set `VITE_API_URL` to the public API origin and `VITE_SITE_URL` to the public site origin. Leave those unset for local Vite.
 
 ## Data behavior
 

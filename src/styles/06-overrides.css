@@ -841,14 +841,6 @@
   height: var(--mark-size);
 }
 
-.account-ledger-list,
-.budget-ledger-list,
-.transaction-ledger-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 .account-ledger-row {
   min-height: 72px;
   padding-block: var(--space-3);

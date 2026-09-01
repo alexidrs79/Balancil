@@ -1,8 +1,7 @@
 import { type ReactNode } from 'react';
 import { CategoryMark } from '../../components/visuals';
 import type { Category, Transaction } from '../../types';
-import { formatCurrency } from '../../utils/finance';
-import { formatAnalyticsMonth, shortDate } from './format';
+import { formatAnalyticsMonth, formatCurrency, formatShortDate } from '../../utils/finance';
 
 export function ChartTooltip({
   active,
@@ -63,7 +62,7 @@ export function TransactionRow({
   const category = categories.find((item) => item.id === transaction.categoryId);
   return (
     <div className="activity-row">
-      <time dateTime={transaction.date}>{shortDate(transaction.date)}</time>
+      <time dateTime={transaction.date}>{formatShortDate(transaction.date)}</time>
       <CategoryMark icon={category?.icon} color={category?.color} />
       <div>
         <strong>{transaction.merchant}</strong>

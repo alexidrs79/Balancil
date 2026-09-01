@@ -20,9 +20,10 @@ import {
   relativeBarWidth,
   averageAcrossWindow,
   savingsRate,
+  chartColors,
+  formatAnalyticsMonth,
 } from '../../utils/finance';
 import { ChartTooltip, SectionHeader, TransactionRow } from './components';
-import { chartColors, formatAnalyticsMonth } from './format';
 
 export function DashboardPage() {
   const { data, isLoading, isError } = useDashboard();

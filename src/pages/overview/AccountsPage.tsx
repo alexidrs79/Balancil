@@ -23,11 +23,10 @@ import {
   useTransactions,
 } from '../../hooks/useFinance';
 import type { Account, Transfer } from '../../types';
-import { formatCurrency } from '../../utils/finance';
+import { formatCurrency, formatShortDate } from '../../utils/finance';
 import { SectionHeader, TransactionRow } from './components';
 import { AccountModal } from './AccountModal';
 import { TransferModal } from './TransferModal';
-import { shortDate } from './format';
 
 /**
  * Spells out how a stored balance was reached, so the number is never a mystery.
@@ -75,7 +74,7 @@ function AccountLedger({
                   </small>
                   <small>
                     {latestActivity
-                      ? `Latest activity ${shortDate(latestActivity)}`
+                      ? `Latest activity ${formatShortDate(latestActivity)}`
                       : 'No recent activity'}
                   </small>
                 </span>

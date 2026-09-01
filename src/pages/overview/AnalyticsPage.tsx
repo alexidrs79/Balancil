@@ -14,25 +14,17 @@ import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
   formatCompactCurrency,
   formatCurrency,
-  formatDate,
   formatDateInput,
+  formatLedgerDate,
+  formatAnalyticsMonth,
   relativeBarWidth,
   averageAcrossWindow,
   latestChangeLabel,
   savingsRate,
 } from '../../utils/finance';
 import { ChartTooltip, SectionHeader } from './components';
-import { formatAnalyticsMonth } from './format';
 
 type AnalyticsPreset = '1' | '3' | '6' | '12' | '24' | 'custom';
-
-function formatAnalyticsDate(value: string) {
-  return formatDate(value, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
 
 export function AnalyticsPage() {
   const [rangePreset, setRangePreset] = useState<AnalyticsPreset>('6');
@@ -82,7 +74,7 @@ export function AnalyticsPage() {
     ? latestChangeLabel(currentMonth.expenses, previousMonth.expenses)
     : 'No change';
   const savingsRateValue = savingsRate(summary.income, summary.savings);
-  const rangeLabel = `${formatAnalyticsDate(analytics.range.from)} – ${formatAnalyticsDate(analytics.range.to)}`;
+  const rangeLabel = `${formatLedgerDate(analytics.range.from)} – ${formatLedgerDate(analytics.range.to)}`;
   const monthCount = trendData.length;
   const hasTrendActivity = trendData.some((month) => month.income > 0 || month.expenses > 0);
   const spendingByCategory = analytics.categorySpending

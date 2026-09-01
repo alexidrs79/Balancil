@@ -1331,6 +1331,50 @@
     grid-template-columns: 1fr;
   }
 
+  /* Three tiles do not survive a phone width once "Already in ledger" wraps, so
+     each becomes a label/value row instead. */
+  .import-summary {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .import-summary > div {
+    padding: var(--space-3);
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .import-summary dd {
+    font-size: var(--text-xl);
+  }
+
+  .import-file input[type='file'] {
+    font-size: var(--text-caption);
+  }
+
+  .import-file input[type='file']::file-selector-button {
+    margin-right: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  /* A pill and an amount beside the copy squeezes the merchant line onto two
+     rows at this width, so the row splits: copy above, pill and figure below. */
+  .import-preview .ledger-row:has(.status-pill) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .import-preview .ledger-row:has(.status-pill) > span:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .import-preview .ledger-row:has(.status-pill) .status-pill {
+    grid-column: 1;
+    justify-self: start;
+  }
+
   .chart-insights > div + div {
     border-top: 1px solid var(--border);
     border-left: 0;
@@ -1546,13 +1590,15 @@
 
   .modal > header,
   .modal .form-grid,
+  .modal .import-panel,
   .modal .confirmation {
     padding: var(--modal-gutter);
   }
 
   /* Restated after the shorthand above, which would otherwise put the dropped
      bottom padding back and unstick the footer from the modal edge. */
-  .modal .form-grid {
+  .modal .form-grid,
+  .modal .import-panel {
     padding-bottom: 0;
   }
 
