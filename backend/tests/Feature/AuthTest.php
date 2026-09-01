@@ -23,6 +23,7 @@ class AuthTest extends TestCase
 
         $response->assertCreated()->assertJsonStructure(['token', 'expiresAt', 'user' => ['id', 'name', 'email', 'initials', 'currency']]);
         $user = User::where('email', 'jamie@example.com')->firstOrFail();
+        Sanctum::actingAs($user);
         $this->assertCount(10, $user->categories);
         $this->assertNotNull($user->preferences);
         $this->assertSame(0, $user->accounts()->count());

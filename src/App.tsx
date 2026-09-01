@@ -45,25 +45,27 @@ const AppNotFoundPage = lazy(() =>
 );
 
 const DashboardPage = lazy(() =>
-  import('./pages/OverviewPages').then((module) => ({ default: module.DashboardPage })),
+  import('./pages/overview/DashboardPage').then((module) => ({ default: module.DashboardPage })),
 );
 const AccountsPage = lazy(() =>
-  import('./pages/OverviewPages').then((module) => ({ default: module.AccountsPage })),
+  import('./pages/overview/AccountsPage').then((module) => ({ default: module.AccountsPage })),
 );
 const AnalyticsPage = lazy(() =>
-  import('./pages/OverviewPages').then((module) => ({ default: module.AnalyticsPage })),
+  import('./pages/overview/AnalyticsPage').then((module) => ({ default: module.AnalyticsPage })),
 );
 const TransactionsPage = lazy(() =>
-  import('./pages/TransactionsPage').then((module) => ({ default: module.TransactionsPage })),
+  import('./pages/transactions/TransactionsPage').then((module) => ({
+    default: module.TransactionsPage,
+  })),
 );
 const BudgetsPage = lazy(() =>
-  import('./pages/ManagementPages').then((module) => ({ default: module.BudgetsPage })),
+  import('./pages/BudgetsPage').then((module) => ({ default: module.BudgetsPage })),
 );
 const GoalsPage = lazy(() =>
-  import('./pages/ManagementPages').then((module) => ({ default: module.GoalsPage })),
+  import('./pages/goals/GoalsPage').then((module) => ({ default: module.GoalsPage })),
 );
 const SettingsPage = lazy(() =>
-  import('./pages/ManagementPages').then((module) => ({ default: module.SettingsPage })),
+  import('./pages/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
 );
 
 const publicMetadata: Record<string, { title: string; description: string }> = {

@@ -127,6 +127,7 @@ class LedgerMathTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-09-01 01:00:00', 'UTC'));
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->preferences()->create([
             'currency' => 'USD',
             'locale' => 'en-US',
@@ -148,7 +149,6 @@ class LedgerMathTest extends TestCase
                 'date' => $date, 'status' => 'completed',
             ]);
         }
-        Sanctum::actingAs($user);
 
         $this->getJson('/api/dashboard')
             ->assertOk()
@@ -164,6 +164,7 @@ class LedgerMathTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-09-02 12:00:00', 'UTC'));
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $user->preferences()->create([
             'currency' => 'USD',
             'locale' => 'en-US',
@@ -186,7 +187,6 @@ class LedgerMathTest extends TestCase
                 'date' => $date, 'status' => 'completed',
             ]);
         }
-        Sanctum::actingAs($user);
 
         $this->getJson('/api/budgets')
             ->assertOk()
@@ -199,6 +199,8 @@ class LedgerMathTest extends TestCase
     private function seedLedger(): array
     {
         $user = User::factory()->create();
+        // The fixtures below run through the finance services as this user.
+        Sanctum::actingAs($user);
         $checking = $user->accounts()->create([
             'name' => 'Checking', 'type' => 'checking', 'balance' => 10000,
             'institution' => 'Bank', 'color' => '#123d34',

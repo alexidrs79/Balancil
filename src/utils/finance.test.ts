@@ -1,68 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import type { Budget, Transaction, TransactionFilters } from '../types';
+import type { Budget, TransactionFilters } from '../types';
 import {
   budgetPercentage,
   budgetStatus,
-  calculateSummary,
-  filterTransactions,
   formatDate,
   formatDateInput,
   goalProgress,
   hiddenTransactionFilterCount,
-  paginate,
   relativeBarWidth,
   savingsRate,
   monthsUntil,
   averageAcrossWindow,
   latestChangeLabel,
 } from './finance';
-
-const transactions: Transaction[] = [
-  {
-    id: '1',
-    merchant: 'Green Market',
-    description: 'Groceries',
-    amount: 80,
-    type: 'expense',
-    categoryId: 'food',
-    accountId: 'checking',
-    date: '2026-08-20',
-    status: 'completed',
-  },
-  {
-    id: '2',
-    merchant: 'Acme Studio',
-    description: 'Salary',
-    amount: 5000,
-    type: 'income',
-    categoryId: 'salary',
-    accountId: 'checking',
-    date: '2026-08-01',
-    status: 'completed',
-  },
-  {
-    id: '3',
-    merchant: 'Metro',
-    description: 'Transit',
-    amount: 40,
-    type: 'expense',
-    categoryId: 'transport',
-    accountId: 'credit',
-    date: '2026-08-10',
-    status: 'completed',
-  },
-  {
-    id: '4',
-    merchant: 'Bookstore',
-    description: 'Technical books',
-    amount: 120,
-    type: 'expense',
-    categoryId: 'shopping',
-    accountId: 'credit',
-    date: '2026-07-15',
-    status: 'pending',
-  },
-];
 
 const baseFilters: TransactionFilters = {
   search: '',
@@ -73,20 +23,6 @@ const baseFilters: TransactionFilters = {
   dateTo: '',
   sort: 'newest',
 };
-
-describe('calculateSummary', () => {
-  it('aggregates completed transactions only', () => {
-    expect(calculateSummary(transactions)).toEqual({
-      income: 5000,
-      expenses: 120,
-      savings: 4880,
-    });
-  });
-
-  it('returns zeros for an empty list', () => {
-    expect(calculateSummary([])).toEqual({ income: 0, expenses: 0, savings: 0 });
-  });
-});
 
 describe('date formatting', () => {
   it('uses the requested reporting timezone for date input defaults', () => {
@@ -100,62 +36,6 @@ describe('date formatting', () => {
     expect(formatDate('2026-09-01', { year: 'numeric', month: '2-digit', day: '2-digit' })).toBe(
       '09/01/2026',
     );
-  });
-});
-
-describe('filterTransactions', () => {
-  it('filters by search text across merchant and description', () => {
-    const result = filterTransactions(transactions, {
-      ...baseFilters,
-      search: 'market',
-    });
-    expect(result).toHaveLength(1);
-    expect(result[0]?.merchant).toBe('Green Market');
-  });
-
-  it('filters by category, account, and type', () => {
-    const result = filterTransactions(transactions, {
-      ...baseFilters,
-      categoryId: 'transport',
-      accountId: 'credit',
-      type: 'expense',
-    });
-    expect(result.map((item) => item.id)).toEqual(['3']);
-  });
-
-  it('filters by date range inclusively', () => {
-    const result = filterTransactions(transactions, {
-      ...baseFilters,
-      dateFrom: '2026-08-01',
-      dateTo: '2026-08-15',
-    });
-    expect(result.map((item) => item.id).sort()).toEqual(['2', '3']);
-  });
-
-  it('includes timestamped transactions on both date boundaries', () => {
-    const timestamped = transactions.map((transaction) => ({
-      ...transaction,
-      date: `${transaction.date}T18:30:00.000Z`,
-    }));
-    const result = filterTransactions(timestamped, {
-      ...baseFilters,
-      dateFrom: '2026-08-10',
-      dateTo: '2026-08-20',
-    });
-    expect(result.map((item) => item.id).sort()).toEqual(['1', '3']);
-  });
-
-  it('sorts by amount ascending and descending', () => {
-    const highest = filterTransactions(transactions, {
-      ...baseFilters,
-      sort: 'highest',
-    });
-    const lowest = filterTransactions(transactions, {
-      ...baseFilters,
-      sort: 'lowest',
-    });
-    expect(highest[0]?.amount).toBe(5000);
-    expect(lowest[0]?.amount).toBe(40);
   });
 });
 
@@ -250,15 +130,5 @@ describe('relativeBarWidth', () => {
     expect(relativeBarWidth(50, 100)).toBe(50);
     expect(relativeBarWidth(100, 100)).toBe(100);
     expect(relativeBarWidth(120, 100)).toBe(100);
-  });
-});
-
-describe('paginate', () => {
-  it('returns the correct page slice and metadata', () => {
-    const page = paginate([1, 2, 3, 4, 5, 6, 7], 2, 3);
-    expect(page.items).toEqual([4, 5, 6]);
-    expect(page.totalPages).toBe(3);
-    expect(page.page).toBe(2);
-    expect(page.totalItems).toBe(7);
   });
 });

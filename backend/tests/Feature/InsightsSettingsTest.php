@@ -15,6 +15,7 @@ class InsightsSettingsTest extends TestCase
     public function test_dashboard_summary_covers_only_the_current_month(): void
     {
         $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $account = $user->accounts()->create([
             'name' => 'Cash', 'type' => 'cash', 'balance' => 100,
             'institution' => 'Wallet', 'color' => '#111111',
@@ -28,7 +29,6 @@ class InsightsSettingsTest extends TestCase
             'categoryId' => $salary->id, 'accountId' => $account->id,
             'date' => $lastMonth->toDateString(), 'status' => 'completed',
         ]);
-        Sanctum::actingAs($user);
 
         $response = $this->getJson('/api/dashboard')->assertOk();
 
@@ -45,6 +45,7 @@ class InsightsSettingsTest extends TestCase
     public function test_dashboard_analytics_and_real_settings_use_owned_data(): void
     {
         $user = User::factory()->create(['password' => 'old-password']);
+        Sanctum::actingAs($user);
         $user->preferences()->create(['currency' => 'USD']);
         $account = $user->accounts()->create([
             'name' => 'Cash', 'type' => 'cash', 'balance' => 100,
@@ -60,7 +61,6 @@ class InsightsSettingsTest extends TestCase
                 'date' => now()->toDateString(), 'status' => 'completed',
             ]);
         }
-        Sanctum::actingAs($user);
 
         $this->getJson('/api/dashboard')->assertOk()
             ->assertJsonPath('summary.income', 1000)

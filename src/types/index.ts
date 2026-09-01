@@ -34,6 +34,8 @@ export interface Account {
   openingBalance?: number;
   /** Net effect of every completed transaction and transfer on this account. */
   netActivity?: number;
+  /** Date of the most recent transaction on this account, if any. */
+  lastActivityAt?: string;
   institution: string;
   color: string;
   isActive?: boolean;
@@ -84,6 +86,53 @@ export interface GoalContribution {
   amount: number;
   date: string;
   note: string | null;
+}
+
+/** One page of the ledger, with totals for the whole filtered set. */
+export interface TransactionPage {
+  data: Transaction[];
+  meta: {
+    currentPage: number;
+    lastPage: number;
+    perPage: number;
+    total: number;
+    from: number | null;
+    to: number | null;
+  };
+  summary: FinanceSummary & { completedCount: number; ledgerTotal: number };
+}
+
+/** One line of an uploaded file, as the API read it. */
+export interface TransactionImportRow {
+  line: number;
+  date: string | null;
+  merchant: string;
+  description: string;
+  amount: number | null;
+  type: TransactionType | null;
+  status: TransactionStatus;
+  account: string;
+  accountId: string | null;
+  category: string;
+  categoryId: string | null;
+  errors: string[];
+  duplicate?: boolean;
+}
+
+export interface TransactionImportReview {
+  rows: TransactionImportRow[];
+  valid: number;
+  invalid: number;
+}
+
+export interface TransactionImportResult {
+  imported: number;
+  skipped: number;
+}
+
+export interface TransactionQuery extends TransactionFilters {
+  page?: number;
+  perPage?: number;
 }
 
 export interface TransactionFilters {

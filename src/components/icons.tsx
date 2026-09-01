@@ -305,6 +305,22 @@ export const Trash: IconComponent = (props) => (
   </Glyph>
 );
 
+export const Upload: IconComponent = (props) => (
+  <Glyph {...props}>
+    <path d="M8 10.75V2.75" />
+    <path d="M4.75 6L8 2.75L11.25 6" />
+    <path d="M2.75 10.75V13.25H13.25V10.75" />
+  </Glyph>
+);
+
+export const Download: IconComponent = (props) => (
+  <Glyph {...props}>
+    <path d="M8 2.75V10.75" />
+    <path d="M4.75 7.5L8 10.75L11.25 7.5" />
+    <path d="M2.75 10.75V13.25H13.25V10.75" />
+  </Glyph>
+);
+
 export const Filter: IconComponent = (props) => (
   <Glyph {...props}>
     <path d="M2.25 3.5H13.75L9.25 8.75V13L6.75 11.25V8.75Z" />

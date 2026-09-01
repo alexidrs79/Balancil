@@ -1,0 +1,1365 @@
+/* Late cross-area refinements and keyframes. These deliberately come after
+   everything above, so they are grouped by when they apply rather than by area.
+
+   Part of one cascade: see index.css. Order is load-bearing, so rules stay in
+   the sequence they were authored in rather than being regrouped. */
+
+.auth-header {
+  min-height: calc(64px + var(--space-6));
+  padding: 0 max(24px, calc((100% - 1240px) / 2));
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+}
+
+.auth-header .brand {
+  gap: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.auth-header .brand > span {
+  border-radius: var(--radius-brand);
+  background: var(--brand);
+  color: var(--surface);
+}
+
+.auth-header .brand-wordmark {
+  margin-left: var(--space-3);
+  font-weight: inherit;
+  white-space: nowrap;
+}
+
+.auth-kicker {
+  margin-bottom: var(--space-4);
+  color: var(--lime-ink);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.auth-form input {
+  min-height: 48px;
+  border-color: var(--border-input);
+  background: var(--surface);
+  border-radius: var(--radius-field);
+}
+
+.password-field > button {
+  width: 44px;
+  height: 44px;
+  right: 2px;
+}
+
+/* Authenticated shell and shared financial workspace */
+
+.app-shell,
+.main-column,
+.page {
+  background: var(--surface);
+}
+
+.sidebar .brand > span {
+  border-radius: var(--radius-brand);
+}
+
+.page-header h1,
+.overview-intro h1,
+.data-heading h2,
+.settings-panel h2 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.045em;
+}
+
+.settings-section-nav button,
+.settings-section-nav button.active {
+  border-radius: var(--radius-tile);
+}
+
+.financial-summary,
+.analytics-summary {
+  margin-bottom: 48px;
+  padding: 48px 0;
+  border-block: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
+  align-items: end;
+  gap: 64px;
+}
+
+.financial-summary > div > span,
+.analytics-summary-primary > span {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.financial-summary > div > strong,
+.analytics-summary-primary > strong {
+  margin-top: var(--space-3);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(42px, 5vw, 60px);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.financial-summary > div > small,
+.analytics-summary-primary > small {
+  margin-top: var(--space-4);
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.financial-summary dl,
+.analytics-summary dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.accounts-summary dl {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.financial-summary dl > div,
+.analytics-summary dl > div {
+  min-width: 0;
+  padding: 0 var(--space-6);
+  border-left: 1px solid var(--border);
+  border-left-color: rgb(18 61 52 / 0.2);
+}
+
+.financial-summary dt,
+.analytics-summary dt {
+  color: var(--muted);
+  font-size: var(--text-caption);
+}
+
+.financial-summary dd,
+.analytics-summary dd {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.financial-summary dl small,
+.analytics-summary dl small {
+  margin-top: var(--space-2);
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.budget-summary-progress {
+  max-width: 320px;
+  margin-top: var(--space-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.budget-summary-progress small {
+  color: var(--muted);
+  font-size: var(--text-caption);
+}
+
+/* Rounded module cascade overrides */
+
+.auth-page .auth-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: var(--space-10);
+  border-radius: var(--radius-card);
+}
+
+.auth-page .auth-form input:focus,
+.auth-page .auth-form input:focus-visible,
+.landing-simple .landing-trust li:hover,
+.landing-simple .landing-hero-art:hover .landing-preview {
+  transform: none;
+}
+
+.balancil-box {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.filter-count,
+.period-control {
+  border-radius: var(--radius-pill);
+}
+
+.input-shell,
+.transaction-filter-panel,
+.modal {
+  border-radius: var(--radius-field);
+}
+
+.landing-simple a,
+.auth-page a,
+.auth-page button {
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.landing-simple .landing-nav-actions .button,
+.landing-simple .landing-hero-actions .button,
+.landing-simple .landing-cta .button,
+.auth-form > .button {
+  border-radius: var(--radius-pill);
+  box-shadow: none;
+  transform: none;
+}
+
+.landing-simple .landing-nav-actions .button:hover,
+.landing-simple .landing-hero-actions .button:hover,
+.landing-simple .landing-cta .button:hover,
+.auth-form > .button:hover:not(:disabled) {
+  border-color: var(--brand-hover);
+  background: var(--brand-hover);
+  color: var(--surface);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+}
+
+.landing-simple .landing-nav-actions .button:active,
+.landing-simple .landing-hero-actions .button:active,
+.landing-simple .landing-cta .button:active,
+.auth-form > .button:active:not(:disabled) {
+  border-color: var(--brand);
+  background: var(--brand);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.16);
+}
+
+.landing-simple .brand > span,
+.auth-header .brand > span,
+.sidebar .brand > span {
+  border-radius: var(--radius-brand);
+}
+
+.avatar,
+.password-field > button {
+  border-radius: 50%;
+}
+
+.landing-simple .landing-nav-links a,
+.landing-simple .landing-nav-actions > a:not(.button),
+.landing-simple .landing-footer nav a,
+.auth-form a,
+.auth-switch a {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-simple .landing-nav-actions > a:not(.button)::after,
+.landing-simple .landing-footer nav a::after,
+.auth-form a::after,
+.auth-switch a::after {
+  width: 0;
+  height: 2px;
+  position: absolute;
+  right: auto;
+  bottom: -4px;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  content: '';
+  transition: width 160ms ease-out;
+}
+
+.landing-simple .landing-nav-actions > a:not(.button):hover::after,
+.landing-simple .landing-footer nav a:hover::after,
+.auth-form a:hover::after,
+.auth-switch a:hover::after {
+  width: 100%;
+}
+
+.landing-simple .landing-nav-actions > a:not(.button):hover,
+.landing-simple .landing-footer nav a:hover,
+.auth-form a:hover,
+.auth-switch a:hover {
+  color: var(--brand-hover);
+}
+
+/* The section links read as tabs, so they highlight as pills rather than
+   underlining. Tabs sit close together and carry their own padding, which is
+   what gives the highlight its shape. */
+.landing-simple .landing-nav-links {
+  gap: var(--space-1);
+}
+
+.landing-simple .landing-nav-links a {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: rgb(18 61 52 / 0);
+  transition:
+    background var(--landing-interaction-duration) var(--landing-interaction-ease),
+    color var(--landing-interaction-duration) var(--landing-interaction-ease);
+}
+
+.landing-simple .landing-nav-links a:hover {
+  background: rgb(18 61 52 / 0.09);
+}
+
+.landing-simple .landing-nav-actions > a:not(.button) {
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: rgb(18 61 52 / 0);
+  transition:
+    background var(--landing-interaction-duration) var(--landing-interaction-ease),
+    color var(--landing-interaction-duration) var(--landing-interaction-ease);
+}
+
+.landing-simple .landing-nav-actions > a:not(.button)::after {
+  display: none;
+}
+
+.landing-simple .landing-nav-actions > a:not(.button):hover {
+  background: rgb(18 61 52 / 0.09);
+  color: var(--text);
+}
+
+/* Landing modules */
+
+.landing-simple .landing-product-preview {
+  border-radius: var(--radius-card);
+}
+
+.landing-purpose dl.balancil-box {
+  border: 1px solid var(--border);
+}
+
+.landing-purpose dl.balancil-box > div {
+  padding: var(--space-8);
+}
+
+.landing-simple-list.balancil-box,
+.landing-plan-summary.balancil-box {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.landing-simple .landing-trust ul.balancil-box {
+  border-color: rgb(255 255 255 / 0.2);
+  background: rgb(255 255 255 / 0.04);
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.landing-simple .landing-trust li:last-child {
+  border-bottom: 0;
+}
+
+.landing-simple .landing-footer .brand {
+  color: var(--text);
+}
+
+.landing-simple .landing-footer .brand > span {
+  color: #fff;
+  background: var(--brand);
+}
+
+.landing-simple .landing-footer nav,
+.landing-simple .landing-footer nav a {
+  color: var(--muted);
+}
+
+.landing-simple .landing-footer nav strong {
+  color: var(--text);
+}
+
+.landing-simple .landing-footer nav a:hover {
+  color: var(--text);
+}
+
+/* Auth */
+
+/* Authenticated financial modules */
+
+.surface-panel.balancil-box {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.surface-panel.balancil-box > .data-heading,
+.transaction-table-shell.balancil-box > .data-heading {
+  border-bottom: 1px solid var(--border);
+  min-height: 0;
+  align-items: center;
+  padding-bottom: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.liquidity-hero.balancil-box {
+  padding: 40px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  min-height: 236px;
+  background: linear-gradient(135deg, #f7f9f4 0%, #fff 70%);
+}
+
+.overview-facts.balancil-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.overview-insight.section-open {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding-inline: 0;
+}
+
+.overview-split > .surface-panel.balancil-box {
+  border-top: 1px solid var(--border);
+}
+
+.financial-summary.balancil-box,
+.analytics-summary.balancil-box,
+.goals-header-stat.balancil-box {
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+}
+
+.financial-summary dl > div:first-child,
+.analytics-summary dl > div:first-child {
+  border-left: 1px solid var(--border);
+  padding-left: var(--space-6);
+}
+
+.transaction-toolbar.section-open {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.transaction-filter-panel.balancil-box {
+  border-radius: var(--radius-card);
+}
+
+.transaction-table-shell.balancil-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  display: block;
+}
+
+.goal-list.balancil-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  gap: 0;
+}
+
+.goal-row:last-child {
+  border-bottom: 0;
+}
+
+.settings-section-nav.section-open {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.settings-panel.balancil-box {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: var(--space-8);
+}
+
+.progress,
+.ranked-track,
+.category-analysis-row > div,
+.overview-insight-progress {
+  border-radius: var(--radius-pill);
+}
+
+@keyframes skeleton-wave {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes product-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes route-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes section-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
+}
+
+@keyframes row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0.08);
+  }
+}
+
+@keyframes spark-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes spark-dot {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spark-reveal {
+  from {
+    clip-path: inset(-12px 100% -12px -12px);
+  }
+
+  to {
+    clip-path: inset(-12px -12px -12px -12px);
+  }
+}
+
+@keyframes analytics-bar-rise {
+  from {
+    opacity: 0.35;
+    transform: scaleY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.landing-simple .landing-product-preview,
+.landing-purpose dl.balancil-box,
+.landing-simple-list.balancil-box,
+.landing-plan-summary.balancil-box {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.landing-simple .landing-footer nav strong,
+.landing-simple .landing-footer nav a:hover {
+  color: var(--text);
+}
+
+.sidebar .avatar,
+.password-field > button {
+  border-radius: 50%;
+}
+
+.overview-facts dl > div {
+  padding: 24px 28px;
+}
+
+.overview-facts dl > div:first-child {
+  padding-left: 0;
+}
+
+.overview-facts dl > div:last-child {
+  padding-right: 0;
+}
+
+.ranked-row,
+.category-analysis-row,
+.allocation-row {
+  min-height: 72px;
+}
+
+.transaction-filter-panel.balancil-box,
+.transaction-table-shell.balancil-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.auth-form > .button:hover:not(:disabled) svg {
+  transform: none;
+}
+
+.product-page > * {
+  margin-block: 0;
+}
+
+.data-label,
+.eyebrow {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.07em;
+}
+
+/* Card model: the card owns padding. Children never re-pad horizontally.
+   Children that draw a divider use `.card-bleed` to reach the card edge. */
+.surface-panel.balancil-box,
+.transaction-toolbar.balancil-box,
+.transaction-filter-panel.balancil-box,
+.transaction-table-shell.balancil-box,
+.goal-list.balancil-box,
+.settings-section-nav.balancil-box,
+.settings-panel.balancil-box {
+  --card-pad: var(--space-6);
+  padding: var(--card-pad);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.data-heading,
+.account-summary-row,
+.activity-row,
+.ranked-row,
+.category-analysis-row,
+.allocation-row,
+.account-ledger-row,
+.budget-ledger-row,
+.transaction-ledger-row,
+.goal-row,
+.goal-list-toolbar {
+  margin-inline: calc(var(--card-pad, var(--space-6)) * -1);
+  padding-inline: var(--card-pad, var(--space-6));
+}
+
+/* The heading keeps the negative inline margin from the bleed group so its
+   divider reaches both card edges, but it must still sit on the card's own
+   top padding rather than against the border. */
+.surface-panel.balancil-box > .data-heading {
+  margin-top: 0;
+}
+
+.surface-panel.balancil-box > :last-child,
+.goal-list.balancil-box > :last-child {
+  margin-bottom: 0;
+}
+
+.visual-mark svg,
+.account-mark svg,
+.goal-mark svg {
+  width: 18px;
+  height: 18px;
+}
+
+.product-page .liquidity-hero.balancil-box,
+.product-page .financial-summary.balancil-box,
+.product-page .analytics-summary.balancil-box,
+.product-page .goals-header-stat.balancil-box {
+  margin: 0;
+  padding: var(--card-pad, var(--space-6));
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--lime);
+  color: var(--brand);
+  box-shadow: none;
+}
+
+.product-page .liquidity-hero.balancil-box {
+  min-height: 0;
+  display: block;
+}
+
+/* Rules drawn on a lime hero need a brand-tinted divider; the neutral
+   `--border` grey reads as a dirty smudge against lime. */
+.product-page .liquidity-hero .overview-facts,
+.product-page .liquidity-hero .overview-facts dl > div,
+.product-page .financial-summary dl > div,
+.product-page .analytics-summary dl > div,
+.product-page .goals-header-stat dl > div {
+  border-color: rgb(18 61 52 / 0.16);
+}
+
+.product-page .liquidity-hero .overview-facts {
+  border-bottom: 0;
+}
+
+.liquidity-hero-main {
+  min-height: 172px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(320px, 1.18fr);
+  align-items: center;
+  gap: 40px;
+}
+
+.liquidity-copy > p,
+.financial-summary > div > span,
+.analytics-summary-primary > span,
+.goals-header-stat > div > span {
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.position-value,
+.financial-summary > div > strong,
+.analytics-summary-primary > strong,
+.goals-header-stat > div > strong {
+  color: var(--brand);
+  font-family: var(--font-mono);
+  font-size: clamp(48px, 6vw, 68px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.96;
+}
+
+.liquidity-hero .trend-badge {
+  background: rgb(18 61 52 / 0.1);
+  color: var(--brand);
+}
+
+/* The area gradient reads as a hard-edged block against lime, so on this
+   surface the sparkline is carried by the line and dot alone. */
+.liquidity-spark .mini-sparkline-area {
+  opacity: 0.12;
+}
+
+.overview-facts dt,
+.financial-summary dt,
+.analytics-summary dt,
+.goals-header-stat dt {
+  color: rgb(18 61 52 / 0.72);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.overview-facts dd,
+.financial-summary dd,
+.analytics-summary dd,
+.goals-header-stat dd {
+  margin: var(--space-2) 0 0;
+  color: var(--brand);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.overview-facts small,
+.financial-summary small,
+.analytics-summary small,
+.goals-header-stat small {
+  color: rgb(18 61 52 / 0.76);
+}
+
+.financial-summary.balancil-box,
+.analytics-summary.balancil-box {
+  grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.15fr);
+  align-items: end;
+  gap: 48px;
+}
+
+.budget-summary-progress .progress,
+.goals-header-stat > .progress {
+  background: rgb(18 61 52 / 0.16);
+}
+
+.budget-summary-progress .progress > span,
+.goals-header-stat > .progress > span {
+  background: var(--brand);
+}
+
+.goals-header-stat.balancil-box {
+  gap: var(--space-6);
+}
+
+.account-group > h3 {
+  margin: 0 0 var(--space-2);
+  padding: 0 0 var(--space-3);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.account-group > h3 .account-mark {
+  width: var(--mark-size);
+  height: var(--mark-size);
+}
+
+.account-ledger-list,
+.budget-ledger-list,
+.transaction-ledger-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.account-ledger-row {
+  min-height: 72px;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(112px, auto) auto;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.account-ledger-row:last-child {
+  border-bottom: 0;
+}
+
+.ledger-account-name {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ledger-account-copy strong,
+.ledger-account-copy small {
+  display: block;
+}
+
+.ledger-account-copy strong {
+  font-size: 14px;
+}
+
+.account-ledger-row .ledger-balance {
+  justify-self: end;
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  text-align: right;
+}
+
+.account-ledger-row .ledger-balance.negative {
+  color: var(--negative);
+}
+
+.account-ledger-row .ledger-balance small {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.budget-ledger-row {
+  min-height: 72px;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: minmax(210px, 1.15fr) minmax(180px, 0.85fr) minmax(112px, auto) auto;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.budget-row-identity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.budget-row-identity strong,
+.budget-row-identity small,
+.budget-row-remaining small {
+  display: block;
+}
+
+.budget-row-identity small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.budget-row-progress {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.budget-row-progress .budget-utilization {
+  min-width: 108px;
+  flex: 1;
+}
+
+.budget-row-progress .progress {
+  height: 6px;
+}
+
+.budget-row-progress .budget-utilization > span {
+  margin-top: var(--space-1);
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.budget-row-remaining {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  text-align: right;
+}
+
+.budget-row-remaining small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.transaction-ledger-row {
+  min-height: 72px;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: var(--mark-size) minmax(0, 1fr) auto minmax(112px, auto) auto;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.transfer-ledger-row {
+  min-height: 72px;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: var(--mark-size) minmax(0, 1fr) auto minmax(112px, auto) auto;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.transfer-ledger-row:last-child {
+  border-bottom: 0;
+}
+
+.transfer-route-icon {
+  width: var(--mark-size);
+  height: var(--mark-size);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.transfer-ledger-row .ledger-main {
+  min-width: 0;
+}
+
+.transfer-ledger-row .ledger-main strong,
+.transfer-ledger-row .ledger-main small {
+  display: block;
+}
+
+.transfer-ledger-row .ledger-main small {
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transfer-ledger-row > .money-value {
+  justify-self: end;
+  font-size: var(--text-sm);
+}
+
+.transaction-ledger-row:last-child {
+  border-bottom: 0;
+}
+
+.transaction-row-copy {
+  min-width: 0;
+}
+
+.transaction-row-copy strong,
+.transaction-row-copy small,
+.transaction-row-copy span {
+  display: block;
+}
+
+.transaction-row-copy strong {
+  font-size: 14px;
+}
+
+.transaction-row-copy small {
+  margin-top: 2px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.transaction-row-copy > span {
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-ledger-row > .money-value {
+  justify-self: end;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  text-align: right;
+}
+
+.transaction-ledger-row .row-actions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.transaction-ledger-row .row-actions .button,
+.transfer-ledger-row .row-actions .button,
+.budget-ledger-row .row-actions .button {
+  width: var(--control-sm);
+  min-height: var(--control-sm);
+  padding: 0;
+  border-radius: var(--radius-pill);
+}
+
+.account-ledger-row,
+.budget-ledger-row,
+.transfer-ledger-row,
+.transaction-ledger-row {
+  animation: row-enter var(--duration-normal) var(--ease-standard) both;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.account-ledger-row:hover,
+.budget-ledger-row:hover,
+.transfer-ledger-row:hover,
+.transaction-ledger-row:hover {
+  background: var(--surface-subtle);
+}
+
+.account-ledger-row:nth-child(2),
+.budget-ledger-row:nth-child(2),
+.transaction-ledger-row:nth-child(2),
+.goal-row:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.account-ledger-row:nth-child(3),
+.budget-ledger-row:nth-child(3),
+.transaction-ledger-row:nth-child(3),
+.goal-row:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.account-ledger-row:nth-child(4),
+.budget-ledger-row:nth-child(4),
+.transaction-ledger-row:nth-child(4),
+.goal-row:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+.account-ledger-row:nth-child(n + 5),
+.budget-ledger-row:nth-child(n + 5),
+.transaction-ledger-row:nth-child(n + 5),
+.goal-row:nth-child(n + 5) {
+  animation-delay: 160ms;
+}
+
+.goal-row,
+.account-summary-row,
+.activity-row,
+.ranked-row,
+.category-analysis-row,
+.allocation-row {
+  animation: row-enter var(--duration-normal) var(--ease-standard) both;
+}
+
+.goal-row:nth-child(2),
+.account-summary-row:nth-child(2),
+.activity-row:nth-child(2),
+.ranked-row:nth-child(2),
+.category-analysis-row:nth-child(2),
+.allocation-row:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.goal-row:nth-child(3),
+.account-summary-row:nth-child(3),
+.activity-row:nth-child(3),
+.ranked-row:nth-child(3),
+.category-analysis-row:nth-child(3),
+.allocation-row:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.goal-row:nth-child(n + 4),
+.account-summary-row:nth-child(n + 4),
+.activity-row:nth-child(n + 4),
+.ranked-row:nth-child(n + 4),
+.category-analysis-row:nth-child(n + 4),
+.allocation-row:nth-child(n + 4) {
+  animation-delay: 120ms;
+}
+
+.landing-simple .landing-product-preview,
+.landing-purpose dl.balancil-box,
+.landing-simple-list.balancil-box,
+.landing-plan-summary.balancil-box,
+.surface-panel.balancil-box,
+.financial-summary.balancil-box,
+.analytics-summary.balancil-box,
+.goals-header-stat.balancil-box,
+.goal-list.balancil-box,
+.settings-section-nav.balancil-box,
+.settings-panel.balancil-box,
+.transaction-toolbar.balancil-box,
+.transaction-filter-panel.balancil-box,
+.transaction-table-shell.balancil-box {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+/* Hero figures default to the tabular mono face; names and status words need
+   the display face instead. */
+.has-text-value > div > strong {
+  font-family: var(--font-display);
+  font-variant-numeric: normal;
+  font-size: var(--text-3xl);
+  letter-spacing: -0.02em;
+}
+
+.has-text-value dd {
+  font-family: var(--font-display);
+  font-variant-numeric: normal;
+  letter-spacing: -0.01em;
+}
+
+.panel-total {
+  margin-top: auto;
+  margin-inline: calc(var(--card-pad, var(--space-6)) * -1);
+  padding-inline: var(--card-pad, var(--space-6));
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 650;
+}
+
+.panel-total b {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.account-summary-list.balancil-box,
+.recent-activity-section.balancil-box {
+  display: flex;
+  flex-direction: column;
+}
+
+/* One dark-green emphasis block per page. These must follow the generic card
+   rules above, which otherwise reset the surface back to white. */
+.overview-page .spending-summary-section,
+.analytics-page .allocation-section {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.overview-page .spending-summary-section .data-label,
+.analytics-page .allocation-section .data-label {
+  color: var(--lime);
+}
+
+.overview-page .spending-summary-section .data-heading,
+.analytics-page .allocation-section .data-heading,
+.overview-page .spending-summary-section .ranked-row,
+.analytics-page .allocation-section .allocation-row {
+  border-color: rgb(255 255 255 / 0.16);
+}
+
+.overview-page .spending-summary-section .data-heading h2,
+.analytics-page .allocation-section .data-heading h2,
+.overview-page .spending-summary-section .ranked-name,
+.overview-page .spending-summary-section .ranked-amount,
+.analytics-page .allocation-section .allocation-row span,
+.analytics-page .allocation-section .allocation-row b,
+.analytics-page .allocation-section .allocation-row small {
+  color: #fff;
+}
+
+.overview-page .spending-summary-section .data-detail,
+.overview-page .spending-summary-section .ranked-share,
+.analytics-page .allocation-section .data-detail {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.overview-page .spending-summary-section .section-link {
+  color: #fff;
+  text-decoration-color: var(--lime);
+}
+
+.overview-page .spending-summary-section .ranked-row:hover,
+.analytics-page .allocation-section .allocation-row:hover {
+  background: rgb(255 255 255 / 0.07);
+}
+
+.overview-page .spending-summary-section .ranked-track,
+.analytics-page .allocation-section .progress {
+  background: rgb(255 255 255 / 0.14);
+}
+
+.overview-page .spending-summary-section .ranked-track span,
+.analytics-page .allocation-section .progress > span {
+  background: var(--lime);
+}
+
+/* The mark chip is sized for a light card; on the dark block it needs to fit
+   the row's 32px column and pick up a translucent treatment. */
+.analytics-page .allocation-section .visual-mark {
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.12);
+  color: var(--lime);
+}
+
+.overview-page .spending-summary-section .visual-mark {
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.12);
+  color: var(--lime);
+}
+
+.landing-simple .landing-footer .brand,
+.landing-simple .landing-footer nav strong,
+.landing-simple .landing-footer nav a:hover {
+  color: var(--text);
+}
+
+.landing-simple .landing-footer nav,
+.landing-simple .landing-footer nav a,
+.landing-simple .landing-footer > small {
+  color: var(--muted);
+}
+
+.liquidity-hero.balancil-box,
+.overview-facts.balancil-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.overview-insight.balancil-box {
+  border: 1px solid color-mix(in oklab, var(--attention) 30%, var(--border));
+  border-radius: var(--radius-card);
+}
+
+.account-summary-row,
+.activity-row,
+.ranked-row,
+.category-analysis-row,
+.allocation-row {
+  min-height: 72px;
+}
+
+.auth-form input:focus,
+.auth-form input:focus-visible,
+.landing-simple .landing-trust li:hover,
+.landing-simple .landing-hero-art:hover .landing-preview {
+  transform: none;
+}
+
+.budget-ledger-row {
+  grid-template-columns: minmax(210px, 1.15fr) minmax(180px, 0.85fr) minmax(112px, auto) 40px;
+}
+
+.management-loading,
+.transaction-loading,
+.empty-state,
+.error-state {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: var(--card-pad, var(--space-6));
+  border-radius: var(--radius-card);
+}
+
+.management-loading,
+.transaction-loading {
+  gap: var(--space-3);
+  display: grid;
+}
+
+.management-skeleton-row,
+.table-skeleton {
+  border-radius: var(--radius-tile);
+  min-height: 72px;
+}
+
+/* Phone ≤428 · tablet ≤768 · sidebar drawer ≤1024 · desktop ≥1280 */

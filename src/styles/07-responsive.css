@@ -1,0 +1,1718 @@
+/* Every media query in the app, applied last.
+
+   Part of one cascade: see index.css. Order is load-bearing, so rules stay in
+   the sequence they were authored in rather than being regrouped. */
+
+@media (max-width: 1280px) {
+  .transaction-filter-grid {
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+  }
+
+  .ledger-summary,
+  .analytics-summary,
+  .management-summary {
+    grid-template-columns: minmax(240px, 0.75fr) minmax(440px, 1.25fr);
+  }
+}
+
+@media (max-width: 1080px) {
+  .landing-nav-links {
+    gap: var(--space-4);
+  }
+
+  .landing-hero {
+    min-height: 700px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(390px, 1.1fr);
+    gap: var(--space-8);
+  }
+
+  .landing-hero h1 {
+    font-size: clamp(56px, 6.5vw, 72px);
+  }
+
+  .landing-balance-stamp {
+    left: -20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 20px 0 50px rgb(10 22 18 / 0.2);
+  }
+
+  .main-column {
+    margin-left: 0;
+  }
+
+  .sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    border: 0;
+    background: rgb(10 22 18 / 0.48);
+  }
+
+  .menu-button,
+  .mobile-close {
+    display: inline-flex;
+  }
+
+  .menu-button {
+    margin-right: var(--space-2);
+  }
+
+  .settings-shell {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+
+  .settings-panel {
+    padding-left: var(--space-6);
+  }
+
+  .auth-story {
+    padding: var(--space-8);
+    gap: var(--space-6);
+  }
+
+  .auth-story-body {
+    padding-left: var(--space-6);
+  }
+
+  .auth-panel {
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+@media (max-width: 960px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-story {
+    display: none;
+  }
+
+  .auth-mobile-brand {
+    width: min(440px, 100%);
+    margin-bottom: var(--space-8);
+    display: block;
+  }
+
+  /* The wordmark above the card already carries the brand at this width. */
+  .auth-card-mark {
+    display: none;
+  }
+
+  .auth-panel {
+    padding: var(--space-12) var(--space-6);
+  }
+
+  /* Without the dark panel beside it the glow dominates, so soften it. */
+  .auth-panel::before {
+    width: 320px;
+    height: 320px;
+    right: -140px;
+    top: -130px;
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-hero {
+    padding-top: 88px;
+    grid-template-columns: 1fr;
+    gap: 72px;
+  }
+
+  .landing-hero-copy {
+    max-width: 700px;
+  }
+
+  .landing-hero-art {
+    width: min(680px, 94%);
+    margin-left: auto;
+  }
+
+  .landing-accounts-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-accounts .landing-feature-copy {
+    max-width: 620px;
+    justify-self: start;
+    order: 1;
+  }
+
+  .landing-account-stack {
+    order: 2;
+  }
+
+  .landing-planning-visual {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-planning-orbit {
+    width: 180px;
+    margin: 0 auto;
+  }
+
+  .landing-trust {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-trust > div {
+    max-width: 680px;
+  }
+
+  .landing-cta {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-cta-ticker {
+    width: min(560px, 100%);
+  }
+
+  .landing-footer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+
+  .landing-footer nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .landing-footer > small {
+    grid-column: 1;
+  }
+  .metric-card {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metric-card:last-child {
+    border-bottom: 0;
+  }
+
+  .liquidity-hero {
+    gap: var(--space-6);
+  }
+
+  .liquidity-spark-figure {
+    padding-top: var(--space-6);
+    padding-left: 0;
+    border-top: 1px solid rgb(18 61 52 / 0.2);
+  }
+
+  .liquidity-spark {
+    border-left: 0;
+    height: 104px;
+  }
+  /* Clear the bar explicitly: it is pulled out of flow, so a bare 64px put the
+     kicker 24px above the header's bottom edge instead of below it. */
+  .landing-simple .landing-hero {
+    grid-template-columns: 1fr;
+    padding-block: calc(var(--landing-header-height) + var(--space-10)) 80px;
+  }
+
+  .landing-product-preview {
+    max-width: 640px;
+  }
+
+  .landing-capability,
+  .landing-simple .landing-trust {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  /* Only the columns collapse. Row spacing stays on each block's own margin so the
+     narrower breakpoints below can keep tuning it in one place. */
+  .landing-purpose,
+  .landing-audience {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-purpose-photo,
+  .landing-audience-photo {
+    margin-top: 48px;
+  }
+
+  /* No list beside it once stacked, so the audience photo goes back to sizing itself. */
+  .landing-audience-photo {
+    position: static;
+    min-height: 0;
+  }
+
+  .landing-audience-photo img {
+    position: static;
+  }
+
+  /* Stacked, a portrait or a wide band both read badly, so every photo settles on
+     the same gentle landscape crop. */
+  .landing-purpose-photo,
+  .landing-audience-photo,
+  .landing-trust-photo {
+    aspect-ratio: 16 / 10;
+  }
+
+  .landing-capability.is-reversed .landing-capability-copy,
+  .landing-capability.is-reversed .landing-simple-list {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .landing-capability.is-reversed .landing-capability-copy {
+    order: 0;
+  }
+
+  .landing-capability.is-reversed .landing-simple-list {
+    order: 1;
+  }
+
+  .financial-summary,
+  .analytics-summary {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .financial-summary dl > div:first-child,
+  .analytics-summary dl > div:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .landing-simple .landing-trust {
+    padding: 56px 40px;
+  }
+
+  .financial-summary.balancil-box,
+  .analytics-summary.balancil-box {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .overview-split,
+  .analytics-breakdown-grid,
+  .liquidity-hero,
+  .goals-header-stat,
+  .metric-grid-3,
+  .metric-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-insight {
+    grid-template-columns: minmax(180px, 0.8fr) minmax(180px, 1fr) auto;
+  }
+
+  .overview-insight-progress {
+    grid-column: auto;
+  }
+
+  .liquidity-hero-main {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .budget-ledger-row {
+    grid-template-columns: minmax(200px, 1fr) minmax(180px, 0.8fr) auto auto;
+    gap: var(--space-3);
+  }
+
+  .transaction-ledger-row,
+  .transfer-ledger-row {
+    grid-template-columns: var(--mark-size) minmax(0, 1fr) auto auto;
+  }
+
+  .transaction-ledger-row > .status-pill,
+  .transfer-ledger-row > .status-pill {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .transaction-ledger-row > .money-value,
+  .transfer-ledger-row > .money-value {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .transaction-ledger-row > .row-actions,
+  .transfer-ledger-row > .row-actions {
+    grid-column: 4;
+    grid-row: 1;
+  }
+}
+
+/* The landing bar collapses at 860, not at the usual 768: below roughly 840 the
+   four section links plus both account actions start wrapping onto two lines,
+   so the menu has to take over while the bar still fits on one. */
+@media (max-width: 860px) {
+  .landing-menu-toggle {
+    width: var(--control-md);
+    min-height: var(--control-md);
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--text);
+  }
+
+  .landing-menu-toggle:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring-strong);
+  }
+
+  .landing-menu-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    display: block;
+    cursor: pointer;
+    background: rgb(10 22 18 / 0.28);
+  }
+
+  /* A sheet spanning the bar's full width rather than a corner dropdown, so the
+     section links and the account actions can sit in one reachable list. */
+  .landing-nav-cluster,
+  .landing-simple .landing-nav-cluster {
+    display: none;
+    position: fixed;
+    top: var(--landing-header-height);
+    right: 0;
+    left: 0;
+    z-index: 50;
+    max-height: calc(100dvh - var(--landing-header-height));
+    overflow-y: auto;
+    margin: 0;
+    padding: var(--space-2) var(--landing-gutter) var(--space-6);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    /* Negative spread keeps the blur from bleeding up over the bar, which would
+       otherwise grey out the strip the sheet is supposed to continue. */
+    box-shadow: 0 18px 28px -12px rgb(20 32 28 / 0.22);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    animation: landing-menu-in var(--duration-normal) var(--ease-out) both;
+  }
+
+  .landing-header.is-menu-open .landing-nav-cluster,
+  .landing-simple .landing-header.is-menu-open .landing-nav-cluster {
+    display: flex;
+  }
+
+  .landing-nav-links,
+  .landing-simple .landing-nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* Hairlines between rows, not around them: the sheet edge is the container.
+     The desktop pill radius has to go, or the dividers bow at their ends. */
+  .landing-nav-links a,
+  .landing-simple .landing-nav-links a {
+    min-height: 56px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    color: var(--text);
+    font-size: 16px;
+  }
+
+  .landing-nav-links a:last-child,
+  .landing-simple .landing-nav-links a:last-child {
+    border-bottom: 0;
+  }
+
+  .landing-nav-actions,
+  .landing-simple .landing-nav-actions {
+    /* Capped rather than full-bleed: at the top of this range the sheet is
+       860px wide, and edge-to-edge buttons read as banners. */
+    max-width: 380px;
+    margin-top: var(--space-5);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  /* Order flipped from the bar: on a sheet the primary action reads first. */
+  .landing-simple .landing-nav-actions .button {
+    order: -1;
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .landing-simple .landing-nav-actions > a:not(.button) {
+    min-height: 46px;
+    padding-inline: var(--space-4);
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header:has(.analytics-range-action) {
+    align-items: stretch;
+  }
+
+  .analytics-range-action {
+    justify-items: stretch;
+  }
+
+  /* Stretched full width, the label and its chevron used to bunch up on the left
+     with dead space trailing them; the readout now fills the pill so the mark
+     lands on the right edge. */
+  .analytics-range-action .period-control > .period-control-choice {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .analytics-custom-range {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-frame {
+    border-radius: var(--radius-field);
+  }
+
+  .landing-hero-actions,
+  .landing-simple .landing-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .landing-hero-actions .button,
+  .landing-simple .landing-hero-actions .button,
+  .landing-cta .button,
+  .landing-simple .landing-cta .button,
+  .auth-form > .button {
+    width: 100%;
+  }
+
+  /* On a phone the bare underlined link read as body copy next to a full-width
+     primary action, so it becomes an outlined button of the same size. */
+  .landing-hero-actions .landing-text-link,
+  .landing-simple .landing-hero-actions .landing-text-link {
+    align-self: stretch;
+    min-height: var(--control-lg);
+    padding: 0 var(--space-5);
+    border: 1px solid rgb(18 61 52 / 0.45);
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    text-decoration: none;
+  }
+
+  .landing-simple .landing-hero-actions .landing-text-link:hover {
+    border-color: var(--brand);
+    background: rgb(18 61 52 / 0.06);
+    text-decoration: none;
+  }
+
+  .row-actions .button,
+  .transaction-ledger-row .row-actions .button,
+  .transfer-ledger-row .row-actions .button,
+  .budget-ledger-row .row-actions .button {
+    width: var(--control-md);
+    min-width: var(--control-md);
+    min-height: var(--control-md);
+  }
+
+  .overview-split,
+  .analytics-breakdown-grid,
+  .liquidity-hero,
+  .goals-header-stat,
+  .metric-grid-3,
+  .metric-grid-4,
+  .financial-summary,
+  .analytics-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-checklist ol {
+    grid-template-columns: 1fr;
+  }
+
+  .pending-email,
+  .session-list article {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .session-list article {
+    gap: var(--space-3);
+  }
+
+  .session-list article > .button {
+    align-self: flex-start;
+  }
+
+  .recurring-due-panel article {
+    grid-template-columns: var(--mark-size) minmax(0, 1fr) auto;
+    gap: var(--space-3);
+  }
+
+  .recurring-due-panel article > .recurring-review-actions {
+    grid-column: 2 / -1;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 720px) {
+  .surface-panel.balancil-box,
+  .transaction-toolbar.balancil-box,
+  .transaction-filter-panel.balancil-box,
+  .transaction-table-shell.balancil-box,
+  .goal-list.balancil-box,
+  .settings-panel.balancil-box {
+    --card-pad: var(--space-5);
+  }
+
+  .data-heading {
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .data-heading > :first-child {
+    flex: 1 1 200px;
+  }
+  .landing {
+    --landing-gutter: var(--space-4);
+  }
+
+  .landing-nav {
+    height: 64px;
+  }
+
+  .landing-hero {
+    min-height: 0;
+    padding-top: 72px;
+    padding-bottom: 88px;
+  }
+
+  .landing-hero h1 {
+    font-size: clamp(48px, 13vw, 66px);
+  }
+
+  .landing-hero-lede {
+    font-size: var(--text-base);
+  }
+
+  .landing-hero-art {
+    width: 100%;
+  }
+
+  .landing-preview {
+    transform: translateY(var(--preview-shift));
+  }
+
+  .landing-hero-art:hover .landing-preview {
+    transform: translateY(calc(var(--preview-shift) - 3px));
+  }
+
+  .landing-preview > header,
+  .landing-preview-figure,
+  .landing-preview-rows {
+    padding-inline: var(--space-4);
+  }
+
+  .landing-preview-chart {
+    height: 160px;
+    padding-inline: var(--space-1);
+  }
+
+  .landing-balance-stamp {
+    display: none;
+  }
+
+  .landing-accounts {
+    padding-block: 96px;
+  }
+
+  .landing-transactions {
+    padding-block: 88px 104px;
+  }
+
+  .landing-transactions-head {
+    margin-bottom: var(--space-8);
+  }
+
+  .landing-ledger-body {
+    padding-inline: var(--space-3);
+  }
+
+  .landing-transaction-line {
+    padding-inline: var(--space-2);
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-3);
+  }
+
+  .landing-transaction-date {
+    display: none;
+  }
+
+  .landing-planning {
+    padding-block: 96px 88px;
+  }
+
+  .landing-planning-visual {
+    padding: var(--space-6) var(--space-4);
+    grid-template-columns: 1fr;
+  }
+
+  .landing-planning-orbit {
+    width: 170px;
+    margin: 0 auto;
+  }
+
+  .landing-planning > .landing-feature-copy {
+    margin-bottom: 56px;
+  }
+
+  .landing-trust {
+    padding-block: 96px;
+  }
+
+  .landing-trust li.is-records {
+    margin-left: var(--space-6);
+  }
+
+  .landing-trust li.is-connection {
+    margin-left: var(--space-3);
+  }
+
+  .landing-cta {
+    padding-block: 88px;
+  }
+
+  .landing-cta h2 {
+    font-size: clamp(44px, 12vw, 60px);
+  }
+
+  .landing-cta-ticker {
+    padding: var(--space-6);
+    transform: none;
+  }
+
+  .landing-footer {
+    padding: 56px var(--space-4) var(--space-8);
+  }
+  .page {
+    padding: var(--space-4) var(--space-4) 88px;
+  }
+
+  .overview-facts dl {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-facts dl > div {
+    padding: var(--space-4) 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .overview-facts dl > div:last-child {
+    border-bottom: 0;
+  }
+
+  .overview-insight {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: var(--space-2) 0 var(--space-6);
+  }
+
+  .overview-insight-progress {
+    grid-column: 1 / -1;
+  }
+  .landing-simple .landing-nav,
+  .landing-purpose,
+  .landing-capability,
+  .landing-simple .landing-footer {
+    width: min(100% - 32px, 1240px);
+  }
+
+  .landing-simple .landing-hero {
+    min-height: 0;
+    padding: calc(var(--landing-header-height) + var(--space-10)) 16px 72px;
+    gap: 48px;
+  }
+
+  .landing-simple .landing-hero h1 {
+    font-size: clamp(48px, 14vw, 64px);
+  }
+
+  .landing-simple .landing-hero-lede {
+    font-size: 16px;
+  }
+
+  .landing-purpose {
+    padding: 80px 0;
+  }
+
+  .landing-purpose dl {
+    margin-top: 48px;
+    grid-template-columns: 1fr;
+  }
+
+  .landing-purpose dl > div,
+  .landing-purpose dl > div:first-child {
+    padding: var(--space-6) 0;
+    border-left: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .landing-purpose dl > div:last-child {
+    border-bottom: 0;
+  }
+
+  .landing-capability {
+    padding: 80px 0;
+    gap: 40px;
+  }
+
+  .landing-simple-list,
+  .landing-plan-summary {
+    padding-inline: var(--space-4);
+  }
+
+  .landing-simple .landing-trust {
+    padding: 80px 16px;
+  }
+
+  .landing-simple .landing-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-simple .landing-footer > small {
+    grid-column: auto;
+  }
+
+  /* Matches the 16px gutter the landing rail drops to at this width. */
+  .auth-header {
+    padding-inline: var(--space-4);
+  }
+
+  .auth-panel {
+    padding: 48px var(--space-4);
+    justify-content: flex-start;
+  }
+
+  .financial-summary,
+  .analytics-summary {
+    margin-bottom: 32px;
+    padding: 36px 0;
+  }
+
+  .financial-summary dl,
+  .analytics-summary dl,
+  .accounts-summary dl {
+    grid-template-columns: 1fr;
+  }
+
+  .financial-summary dl > div,
+  .analytics-summary dl > div,
+  .financial-summary dl > div:first-child,
+  .analytics-summary dl > div:first-child {
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--border);
+    border-left: 0;
+  }
+  .landing-purpose dl.balancil-box > div,
+  .landing-purpose dl.balancil-box > div:first-child {
+    padding: var(--space-6);
+  }
+
+  .landing-simple .landing-trust,
+  /* 16px to match the narrower gutter the other sections switch to here. */
+  .landing-simple .landing-cta {
+    padding: 48px 16px;
+    /* A short band on a narrow screen shows much more of the source vertically, which
+       drags in the shadowed edge of the fabric as a hard diagonal. Tightening onto a
+       patch well inside the fabric keeps the texture even. */
+    background-size: cover, 512%;
+    background-position:
+      center,
+      18% center;
+  }
+
+  .landing-steps,
+  .landing-breakdown,
+  .landing-audience {
+    width: min(100% - 32px, 1240px);
+    padding: 64px 0;
+  }
+
+  .landing-steps-list {
+    margin-top: 40px;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .landing-breakdown-card {
+    margin-top: 32px;
+    padding: var(--space-5);
+  }
+
+  /* The bar cannot hold a readable length in a third of a phone width, so the
+     row collapses to label and share with the bar spanning underneath. */
+  .landing-breakdown-card > ul > li {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-5) 0;
+  }
+
+  .landing-breakdown-card i {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  .landing-audience-list {
+    margin-top: 32px;
+    padding-inline: var(--space-5);
+  }
+
+  .landing-audience-list > li {
+    padding: var(--space-6) 0;
+    gap: var(--space-4);
+  }
+
+  .auth-card {
+    padding: var(--space-6);
+  }
+
+  .liquidity-hero.balancil-box,
+  .financial-summary.balancil-box,
+  .analytics-summary.balancil-box,
+  .goals-header-stat.balancil-box {
+    padding: var(--space-6);
+  }
+
+  .overview-facts dl > div,
+  .overview-facts dl > div:first-child,
+  .overview-facts dl > div:last-child {
+    padding: 20px 24px;
+  }
+
+  .overview-facts dl > div + div {
+    border-right: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .overview-insight.balancil-box {
+    padding: 24px;
+  }
+
+  .primary-chart,
+  .analytics-primary-chart,
+  .money-flow-section .primary-chart {
+    height: 240px;
+    padding-block: var(--space-4);
+  }
+  .topbar {
+    height: 56px;
+    padding: 0 var(--space-3);
+  }
+
+  .topbar-route {
+    margin-left: var(--space-1);
+  }
+
+  .mobile-nav {
+    height: 64px;
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 24;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--surface);
+  }
+
+  /* A sheet owns the bottom edge of the screen. Left up, the tab bar covers the
+     sheet's own Cancel and Save buttons. */
+  body:has(.modal-backdrop) .mobile-nav {
+    display: none;
+  }
+
+  .mobile-nav a,
+  .mobile-nav button {
+    min-width: 0;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-1);
+    background: transparent;
+    color: var(--muted);
+    font-size: var(--text-2xs);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .mobile-nav a.active,
+  .mobile-nav button.active {
+    color: var(--brand);
+  }
+
+  .page-header,
+  .overview-intro {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .page-header h1,
+  .overview-intro h1 {
+    font-size: clamp(38px, 12vw, 48px);
+  }
+
+  .overview-insight .section-link {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .position-facts,
+  .ledger-summary dl,
+  .management-summary dl {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .analytics-summary dl {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4) 0;
+  }
+
+  .analytics-summary dl > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .ranked-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .ranked-track {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  .ranked-share {
+    display: none;
+  }
+
+  .metric-grid-4,
+  .goals-header-stat,
+  .goal-figures {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .transaction-toolbar {
+    align-items: stretch;
+  }
+
+  .transaction-toolbar-primary {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .transaction-search-field {
+    grid-column: 1 / -1;
+  }
+
+  .category-analysis-row {
+    grid-template-columns: minmax(100px, 1fr) 48px 88px;
+  }
+
+  .category-analysis-row > div {
+    grid-column: 1 / -1;
+  }
+
+  .filter-toggle {
+    display: inline-flex;
+  }
+
+  .transaction-filter-panel {
+    display: none;
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .transaction-filter-panel.is-open {
+    display: block;
+  }
+
+  .transaction-filter-panel > header {
+    margin-bottom: var(--space-4);
+  }
+
+  .transaction-filter-panel > header strong,
+  .transaction-filter-panel > header small {
+    display: block;
+  }
+
+  .transaction-filter-panel > header strong {
+    font-size: var(--text-sm);
+  }
+
+  .transaction-filter-panel > header small {
+    margin-top: var(--space-1);
+    color: var(--muted);
+    font-size: var(--text-2xs);
+  }
+
+  .filter-close {
+    width: var(--control-md);
+    height: var(--control-md);
+    border: 0;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .transaction-filter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .transaction-filter-panel > footer {
+    margin-top: var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-2xs);
+  }
+
+  .transaction-filter-panel > footer button {
+    min-height: var(--control-md);
+    border: 0;
+    background: transparent;
+    color: var(--brand);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .transaction-table-shell {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .budget-utilization {
+    min-width: 0;
+    grid-template-columns: minmax(48px, 1fr) 48px;
+  }
+
+  .goal-figures {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) 0;
+  }
+
+  .goal-figures > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .settings-shell {
+    grid-template-columns: 1fr;
+  }
+
+  /* Bare icons gave no clue what each section was, so the mobile nav becomes a
+     scrolling row of labelled tabs instead. */
+  .settings-section-nav {
+    margin-inline: calc(var(--space-4) * -1);
+    padding: var(--space-1) var(--space-4);
+    border-right: 0;
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .settings-section-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .settings-section-nav button {
+    min-height: var(--control-md);
+    padding: 0 var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+    background: var(--surface);
+  }
+
+  .settings-section-nav button > svg:last-child,
+  .settings-section-nav button small {
+    display: none;
+  }
+
+  .settings-section-nav button strong {
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+
+  .settings-section-nav button.active {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--surface);
+  }
+
+  .settings-section-nav button.active strong {
+    color: var(--surface);
+  }
+
+  .settings-panel {
+    min-height: 0;
+    padding: var(--space-6) 0 0;
+  }
+
+  .settings-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-field-grid .span-2 {
+    grid-column: auto;
+  }
+  .product-page {
+    gap: var(--space-6);
+  }
+
+  .surface-panel.balancil-box,
+  .transaction-toolbar.balancil-box,
+  .transaction-filter-panel.balancil-box,
+  .transaction-table-shell.balancil-box,
+  .goal-list.balancil-box,
+  .settings-section-nav.balancil-box,
+  .settings-panel.balancil-box,
+  .product-page .liquidity-hero.balancil-box,
+  .product-page .financial-summary.balancil-box,
+  .product-page .analytics-summary.balancil-box,
+  .product-page .goals-header-stat.balancil-box {
+    padding: var(--space-5);
+    border-radius: var(--radius-card);
+  }
+
+  .position-value,
+  .financial-summary > div > strong,
+  .analytics-summary-primary > strong,
+  .goals-header-stat > div > strong {
+    font-size: clamp(40px, 12vw, 54px);
+  }
+
+  .overview-facts dl,
+  .financial-summary dl,
+  .analytics-summary dl,
+  .accounts-summary dl {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-facts dl > div,
+  .overview-facts dl > div:first-child,
+  .financial-summary dl > div,
+  .analytics-summary dl > div,
+  .financial-summary dl > div:first-child,
+  .analytics-summary dl > div:first-child {
+    padding: var(--space-4) 0;
+    border-top: 1px solid rgb(18 61 52 / 0.2);
+    border-left: 0;
+  }
+
+  .overview-facts dl > div:first-child {
+    border-top: 0;
+  }
+
+  .account-ledger-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .account-ledger-row > .status-pill {
+    display: none;
+  }
+
+  .account-ledger-row > .row-actions {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+
+  /* Narrow rows let the breakdown drop to its own line so the account name
+     keeps its width instead of being truncated. */
+  .account-ledger-row .ledger-balance {
+    display: contents;
+  }
+
+  .account-ledger-row .ledger-balance > strong {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .account-ledger-row .ledger-balance > small {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .budget-ledger-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: var(--space-3);
+  }
+
+  .budget-row-progress {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .budget-row-remaining {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .budget-ledger-row > .row-actions {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .transaction-ledger-row,
+  .transfer-ledger-row {
+    grid-template-columns: var(--mark-size) minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-3);
+  }
+
+  .transaction-ledger-row > .status-pill,
+  .transfer-ledger-row > .status-pill {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .transaction-ledger-row > .money-value,
+  .transfer-ledger-row > .money-value {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .transaction-ledger-row > .row-actions,
+  .transfer-ledger-row > .row-actions {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .overview-insight.balancil-box {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-custom-range,
+  .chart-insights {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-insights > div + div {
+    border-top: 1px solid var(--border);
+    border-left: 0;
+  }
+
+  .analytics-primary-chart,
+  .money-flow-section .primary-chart {
+    padding-inline: var(--space-3);
+  }
+
+  .landing-hero {
+    padding-top: 56px;
+    gap: 56px;
+  }
+
+  .landing-hero h1 {
+    font-size: clamp(42px, 13vw, 54px);
+  }
+
+  .landing-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .landing-preview-figure > strong {
+    font-size: 32px;
+  }
+
+  .landing-row small {
+    display: none;
+  }
+
+  .landing-account-line {
+    padding-inline: var(--space-2);
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    gap: var(--space-2);
+  }
+
+  .landing-account-line small {
+    display: none;
+  }
+
+  .landing-ledger-toolbar {
+    padding-inline: var(--space-4);
+  }
+
+  .landing-ledger-toolbar > small {
+    display: none;
+  }
+
+  .landing-progress-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .landing-progress-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .landing-trust li.is-records,
+  .landing-trust li.is-connection {
+    margin-left: 0;
+  }
+
+  .landing-feature-copy h2,
+  .landing-trust h2 {
+    font-size: clamp(36px, 11vw, 48px);
+  }
+
+  .landing-cta-ticker > strong {
+    font-size: 36px;
+  }
+
+  .landing-footer nav {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .topbar-route {
+    display: none;
+  }
+
+  .topbar-action span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .position-facts,
+  .ledger-summary dl,
+  .management-summary dl {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) 0;
+  }
+
+  .position-facts > div:nth-child(odd),
+  .ledger-summary dl > div:nth-child(odd),
+  .management-summary dl > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .metric-grid-3,
+  .metric-grid-4,
+  .goals-header-stat {
+    grid-template-columns: 1fr;
+  }
+
+  .error-page-body {
+    padding: var(--space-8) var(--space-4) var(--space-12);
+  }
+
+  .error-card {
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .error-code {
+    font-size: 52px;
+  }
+
+  .error-card h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .error-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .error-actions .button {
+    width: 100%;
+  }
+
+  .error-actions .landing-text-link {
+    justify-content: center;
+  }
+
+  .error-panel {
+    padding: var(--space-6);
+  }
+
+  .error-destinations {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .transaction-search-field {
+    max-width: none;
+  }
+
+  .transaction-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Let the two dropdowns share the row instead of forcing a 613px line. */
+  .transaction-toolbar-actions > .field-control {
+    min-width: 0;
+    width: auto;
+    flex: 1 1 148px;
+  }
+
+  .transaction-toolbar-actions > .field-control select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .transaction-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-pagination {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .goal-row:first-child {
+    padding: var(--space-4);
+  }
+
+  .goal-figures,
+  .goal-progress-row,
+  .goal-row > footer {
+    margin-left: 0;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid .span-2 {
+    grid-column: auto;
+  }
+
+  .auth-panel {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .modal-backdrop {
+    padding: 0;
+    place-items: end stretch;
+  }
+
+  .modal > header,
+  .modal .form-grid,
+  .modal .confirmation {
+    padding: var(--modal-gutter);
+  }
+
+  /* Restated after the shorthand above, which would otherwise put the dropped
+     bottom padding back and unstick the footer from the modal edge. */
+  .modal .form-grid {
+    padding-bottom: 0;
+  }
+
+  .modal {
+    --modal-gutter: var(--space-5);
+    --modal-footer-pad: var(--space-4);
+    --modal-field-gap: var(--space-4);
+    --modal-footer-gap: var(--space-6);
+    width: 100%;
+    /* Leaves a strip of the page visible above the sheet so it reads as an
+       overlay rather than a full-screen takeover. */
+    max-height: 88dvh;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+
+  .modal .form-actions {
+    margin: calc(var(--modal-footer-gap) - var(--modal-field-gap)) calc(var(--modal-gutter) * -1) 0;
+    padding: var(--modal-footer-pad) var(--modal-gutter)
+      calc(var(--modal-footer-pad) + env(safe-area-inset-bottom));
+  }
+
+  .auth-mobile-brand {
+    margin-bottom: var(--space-8);
+  }
+
+  .form-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .account-ledger-row {
+    align-items: start;
+  }
+
+  .account-ledger-row .ledger-balance > strong {
+    padding-top: 2px;
+  }
+
+  .ledger-account-copy small:last-child {
+    display: none;
+  }
+
+  .transaction-ledger-row > .visual-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .transaction-row-copy small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .legal-shell {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .legal-sidebar {
+    position: static;
+  }
+
+  .legal-sidebar nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .legal-toc {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .legal-header {
+    min-height: 68px;
+    padding-inline: var(--space-4);
+  }
+
+  .legal-return {
+    padding-inline: var(--space-3);
+  }
+
+  .legal-shell {
+    width: min(100% - 32px, 790px);
+    padding-top: var(--space-7);
+  }
+
+  .legal-sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-article h1 {
+    font-size: clamp(40px, 12vw, 52px);
+  }
+
+  .legal-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .legal-highlights,
+  .ledger-guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-highlights > div {
+    min-height: 132px;
+  }
+
+  .legal-next,
+  .ledger-help-note,
+  .profile-photo-setting {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .legal-next > a {
+    justify-content: center;
+  }
+
+  .ledger-help-note {
+    display: flex;
+  }
+
+  .ledger-help-note div {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .landing-simple a,
+  .auth-page a,
+  .auth-page button {
+    transition: none;
+  }
+
+  .section-link svg,
+  .landing-text-link svg {
+    transition: none;
+  }
+
+  .section-link:hover svg,
+  .landing-text-link:hover svg {
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    /* !important is required: the universal selector otherwise loses to every
+       class rule that sets the `animation` shorthand. */
+    animation-duration: 0.01ms !important;
+    /* Without this, staggered entrances leave content hidden for their delay. */
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

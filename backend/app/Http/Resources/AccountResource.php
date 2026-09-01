@@ -19,6 +19,7 @@ class AccountResource extends JsonResource
             'balance' => (float) $this->balance, 'institution' => $this->institution,
             'color' => $this->color, 'isActive' => $this->is_active,
             'openingBalance' => $this->opening_balance, 'netActivity' => $this->net_activity,
+            'lastActivityAt' => $this->whenNotNull($this->last_activity_at),
         ];
     }
 }

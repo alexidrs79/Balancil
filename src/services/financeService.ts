@@ -12,11 +12,59 @@ import type {
   EmailChangeRequest,
   Session,
   Transaction,
+  TransactionImportResult,
+  TransactionImportReview,
+  TransactionPage,
+  TransactionQuery,
   Transfer,
   UserSettings,
 } from '../types';
 
 const get = async <T>(url: string) => (await apiClient.get<T>(url)).data;
+
+/** Laravel's paginator meta, renamed to the camelCase the app uses everywhere else. */
+interface RawTransactionPage {
+  data: Transaction[];
+  meta: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number | null;
+    to: number | null;
+  };
+  summary: TransactionPage['summary'];
+}
+
+/** Filters and paging as a query string, dropping the blanks the API rejects. */
+const toQueryString = (query: object) => {
+  const params = new URLSearchParams();
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') params.set(key, String(value));
+  });
+  const search = params.toString();
+  return search ? `?${search}` : '';
+};
+
+const toPage = (raw: RawTransactionPage): TransactionPage => ({
+  data: raw.data,
+  meta: {
+    currentPage: raw.meta.current_page,
+    lastPage: raw.meta.last_page,
+    perPage: raw.meta.per_page,
+    total: raw.meta.total,
+    from: raw.meta.from,
+    to: raw.meta.to,
+  },
+  summary: raw.summary,
+});
+const toUpload = (file: File, preview: boolean) => {
+  const form = new FormData();
+  form.append('file', file);
+  if (preview) form.append('preview', '1');
+  return form;
+};
+
 const remove = async (url: string) => {
   await apiClient.delete(url);
 };
@@ -44,7 +92,27 @@ export const financeApi = {
   getDashboard: () => get<DashboardData>('/dashboard'),
   getAccounts: () => get<Account[]>('/accounts'),
   getCategories: () => get<Category[]>('/categories'),
-  getTransactions: () => get<Transaction[]>('/transactions'),
+  getTransactions: (query: TransactionQuery = {}) =>
+    get<RawTransactionPage>(`/transactions${toQueryString(query)}`).then(toPage),
+  /** Downloads the current view of the ledger. Server-side filters, server-side file. */
+  exportTransactions: async (query: TransactionQuery = {}) => {
+    // Paging describes the on-screen table, not the file, so only filters carry over.
+    const { page, perPage, ...filters } = query;
+    void page;
+    void perPage;
+    const response = await apiClient.get(`/transactions/export${toQueryString(filters)}`, {
+      responseType: 'blob',
+    });
+    const disposition = String(response.headers['content-disposition'] ?? '');
+    const named = /filename="?([^";]+)"?/.exec(disposition)?.[1];
+    return { blob: response.data as Blob, filename: named ?? 'transactions.csv' };
+  },
+  previewTransactionImport: async (file: File) =>
+    (await apiClient.post<TransactionImportReview>('/transactions/import', toUpload(file, true)))
+      .data,
+  importTransactions: async (file: File) =>
+    (await apiClient.post<TransactionImportResult>('/transactions/import', toUpload(file, false)))
+      .data,
   getRecurringTransactions: () => get<RecurringTransaction[]>('/recurring-transactions'),
   getRecurringDrafts: () => get<RecurringDueDraft[]>('/recurring-drafts/pending'),
   getTransfers: () => get<Transfer[]>('/transfers'),

@@ -1,0 +1,1706 @@
+/* The authenticated workspace: app shell, overview, accounts, transactions,
+   budgets, goals, settings, and the forms and modals they share.
+
+   Part of one cascade: see index.css. Order is load-bearing, so rules stay in
+   the sequence they were authored in rather than being regrouped. */
+
+.analytics-summary {
+  grid-template-columns: minmax(260px, 0.75fr) minmax(560px, 1.5fr);
+}
+
+.analytics-primary > small,
+.management-primary-stat > small {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 650;
+}
+
+.analytics-summary dl {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.analytics-trend-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: 0;
+}
+
+.analytics-range-action {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-2);
+}
+
+.analytics-custom-range {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: var(--space-3);
+  background: var(--surface);
+}
+
+.analytics-custom-range label {
+  display: grid;
+  gap: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+}
+
+.analytics-custom-range input {
+  min-height: var(--control-sm);
+  font-size: var(--text-xs);
+}
+
+.chart-frame {
+  margin-top: var(--space-5);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.analytics-primary-chart {
+  height: 336px;
+  padding: var(--space-5) var(--space-5) var(--space-2);
+}
+
+.money-flow-section .primary-chart {
+  height: 300px;
+  padding: var(--space-5) var(--space-5) var(--space-2);
+}
+
+.chart-empty {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  gap: var(--space-2);
+  color: var(--muted);
+  text-align: center;
+}
+
+.chart-empty strong {
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.chart-empty small {
+  font-size: var(--text-xs);
+}
+
+.chart-insights {
+  margin: 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--surface-subtle);
+}
+
+.chart-insights > div {
+  min-width: 0;
+  padding: var(--space-4) var(--space-5);
+}
+
+.chart-insights > div + div {
+  border-left: 1px solid var(--border);
+}
+
+.chart-insights dt {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 650;
+}
+
+.chart-insights dd {
+  margin: var(--space-1) 0 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.chart-insights dd.negative {
+  color: var(--negative);
+}
+
+.analytics-list-empty {
+  margin: 0;
+  padding: var(--space-8) 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.analytics-breakdown-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(240px, 0.85fr);
+  align-items: stretch;
+  gap: var(--space-8);
+}
+
+/* The two columns hold different row counts, so the shorter card pins its
+   list to the top and lets the trailing total settle at the card foot. */
+.analytics-breakdown-grid > .balancil-box {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The lists take the leftover height so the two cards match, but they are
+   grids: without `align-content` their tracks would stretch and inflate every
+   row instead of leaving the slack at the foot of the card. */
+.analytics-breakdown-grid > .balancil-box > .allocation-list,
+.analytics-breakdown-grid > .balancil-box > .category-analysis-list {
+  flex: 1;
+  align-content: start;
+}
+
+.category-analysis-list,
+.allocation-list {
+  display: grid;
+  gap: 0;
+  padding: 0;
+}
+
+.category-analysis-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 48px 88px minmax(100px, 1.5fr);
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.category-analysis-row > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.category-analysis-row > div {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface-subtle);
+}
+
+.category-analysis-row b {
+  min-width: 44px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  text-align: right;
+}
+
+.category-analysis-row strong {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.allocation-row > div {
+  margin-bottom: var(--space-2);
+  display: grid;
+  grid-template-columns: var(--mark-size) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.allocation-row > div i {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: 50%;
+}
+
+.allocation-row > div b,
+.allocation-row > small {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.allocation-row > small {
+  display: block;
+  margin-top: var(--space-1);
+  text-align: right;
+}
+
+.transaction-toolbar {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-4);
+  background: transparent;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* The icon is a flex sibling rather than absolutely positioned: the base
+   `input:not([type=...])` rule outweighs `.transaction-search input`, so the
+   left padding that used to clear the icon never applied. */
+.input-shell {
+  min-width: 0;
+  min-height: var(--control-md);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--surface);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+  border-radius: var(--radius-sm);
+}
+
+.input-shell:focus-within {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+.input-shell > svg {
+  flex: none;
+  color: var(--muted);
+}
+
+.input-shell:focus-within > svg {
+  color: var(--lime-ink);
+}
+
+/* Flex items default to min-width:auto, which stops the field shrinking below
+   the input's intrinsic size and overflows the toolbar on narrow screens. */
+.input-shell > input:not([type='checkbox']) {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+
+.input-shell > input:focus {
+  border-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Toggle and swatch rows lay themselves out horizontally, so they are excluded
+   here: a bare `.form-grid label` selector outranks their own class rule. */
+.field-control,
+.settings-field-grid label:not(.form-toggle, .form-swatch),
+.form-grid label:not(.form-toggle, .form-swatch) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--text);
+  font-size: var(--text-xs);
+  font-weight: 650;
+}
+
+.field-control > span:not(.input-shell) {
+  display: block;
+  color: var(--text);
+  font-size: var(--text-xs);
+  font-weight: 650;
+}
+
+.transaction-search-field {
+  min-width: 0;
+}
+
+.transaction-search-field .input-shell {
+  width: 100%;
+}
+
+.transaction-toolbar-primary {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(160px, 196px) minmax(160px, 196px);
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.transaction-toolbar-actions,
+.transaction-pagination > div,
+.row-actions {
+  display: flex;
+  align-items: center;
+}
+
+.transaction-toolbar-actions {
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.recurring-due-panel {
+  padding: var(--space-5);
+}
+
+.recurring-due-panel > header {
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.recurring-due-panel > header h2 {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-lg);
+}
+
+.recurring-due-panel > header small {
+  color: var(--muted);
+}
+
+.recurring-due-panel > header > strong {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  font-size: var(--text-xs);
+}
+
+.recurring-due-panel article {
+  min-height: 70px;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: var(--mark-size) minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.recurring-due-panel article > div > strong,
+.recurring-due-panel article > div > small {
+  display: block;
+}
+
+.recurring-due-panel article > div > small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.recurring-review-actions,
+.recurring-template-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.recurring-review-actions .button,
+.recurring-template-actions .button {
+  min-height: var(--control-sm);
+  padding-inline: var(--space-3);
+}
+
+.recurring-manager {
+  padding: var(--space-6);
+}
+
+.recurring-manager > header {
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.recurring-manager > header strong,
+.recurring-manager > header small {
+  display: block;
+}
+
+.recurring-manager > header small {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.recurring-manager ul {
+  max-height: 360px;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.recurring-manager li {
+  min-height: 68px;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.recurring-manager li > div:first-child strong,
+.recurring-manager li > div:first-child small {
+  display: block;
+}
+
+.recurring-manager li > div:first-child small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.recurring-empty {
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-3);
+  color: var(--muted);
+  text-align: center;
+}
+
+.recurring-empty p {
+  margin: 0;
+}
+
+.transaction-search {
+  min-width: 0;
+}
+
+.transaction-toolbar-primary > .field-control select {
+  width: 100%;
+  min-height: var(--control-md);
+}
+
+.filter-toggle,
+.filter-toggle.is-always {
+  display: inline-flex;
+}
+
+.filter-count {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  display: inline-grid;
+  place-items: center;
+  background: var(--brand);
+  color: var(--lime);
+  font-size: 10px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.transaction-filter-panel {
+  display: none;
+  margin-top: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+}
+
+.transaction-filter-panel.is-open {
+  display: block;
+}
+
+.transaction-filter-panel > header,
+.transaction-filter-panel > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.transaction-filter-panel > header {
+  margin-bottom: var(--space-4);
+}
+
+.transaction-filter-panel > header strong,
+.transaction-filter-panel > header small {
+  display: block;
+}
+
+.transaction-filter-panel > header strong {
+  font-size: var(--text-sm);
+}
+
+.transaction-filter-panel > header small {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.transaction-filter-panel > footer {
+  margin-top: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.transaction-filter-panel > footer button {
+  min-height: var(--control-md);
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.filter-close {
+  width: var(--control-md);
+  height: var(--control-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--muted);
+}
+
+.transaction-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: var(--space-3);
+}
+
+.transaction-filter-grid input,
+.transaction-filter-grid select {
+  min-height: var(--control-md);
+  font-size: var(--text-xs);
+}
+
+.transaction-date-error {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.transaction-table-shell,
+.transaction-loading {
+  border-bottom: 1px solid var(--border);
+}
+
+.ledger-result-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 650;
+}
+
+.ledger-result-summary .income {
+  color: var(--positive);
+}
+
+.ledger-result-summary .expense {
+  color: var(--negative);
+}
+
+.transaction-description strong,
+.transaction-description small {
+  display: block;
+}
+
+.transaction-description strong {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.transaction-description small {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.transaction-date {
+  width: 120px;
+  white-space: nowrap;
+}
+
+.category-label i {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: 50%;
+}
+
+.status.pending,
+.management-status.warning {
+  color: var(--attention);
+}
+
+.status.failed,
+.management-status.exceeded {
+  color: var(--negative);
+}
+
+.money-sign {
+  display: inline-block;
+  width: 0.85em;
+  margin-right: 2px;
+  text-align: right;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  opacity: 0.72;
+  transition: opacity 150ms ease;
+}
+
+.row-actions .button {
+  width: var(--control-sm);
+  min-height: var(--control-sm);
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.transaction-pagination {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.transaction-pagination > div {
+  gap: var(--space-2);
+}
+
+.transaction-pagination .button {
+  width: var(--control-md);
+  padding: 0;
+}
+
+.table-skeleton,
+.management-skeleton-row,
+.goal-skeleton-row {
+  height: 56px;
+  margin-bottom: 1px;
+}
+
+.management-summary {
+  grid-template-columns: minmax(260px, 0.8fr) minmax(480px, 1.2fr);
+}
+
+.budget-utilization {
+  min-width: 160px;
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.budget-utilization > span {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  text-align: right;
+}
+
+.management-loading {
+  padding-top: var(--space-4);
+}
+
+.goal-list {
+  display: grid;
+  gap: 0;
+}
+
+.goal-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 76px;
+  border-bottom: 1px solid var(--border);
+}
+
+.goal-row {
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding-block: var(--space-5);
+}
+
+.goal-row > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.goal-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.goal-identity p {
+  margin: 0 0 var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.goal-identity h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.goals-header-stat {
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(160px, 0.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-6);
+  background: var(--surface);
+  margin-bottom: 40px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.goals-header-stat strong {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3vw, 44px);
+}
+
+.goals-side-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  border-top-color: rgb(18 61 52 / 0.2);
+}
+
+.goals-side-facts dt {
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.goals-side-facts dd {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-weight: 650;
+}
+
+.goal-figures {
+  margin: var(--space-6) 0 var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.goal-figures > div {
+  background: transparent;
+  padding: 0 var(--space-4);
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+}
+
+.goal-figures > div > span {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.goal-figures > div > strong {
+  display: block;
+  font-size: var(--text-sm);
+}
+
+.goal-progress-row {
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.goal-row > footer {
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.contribution-history {
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+.contribution-history > header {
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.contribution-history > header small,
+.contribution-history > p {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.contribution-history ul {
+  max-height: 240px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.contribution-history li {
+  min-height: 58px;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.contribution-history li strong,
+.contribution-history li small {
+  display: block;
+}
+
+.contribution-history li small {
+  max-width: 320px;
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contribution-confirm {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.contribution-confirm .button {
+  min-height: var(--control-sm);
+  padding-inline: var(--space-2);
+}
+
+.settings-shell {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.36fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-8);
+}
+
+.settings-section-nav {
+  border: 0;
+  border-radius: 0;
+  display: grid;
+  padding: 0;
+  background: transparent;
+}
+
+.settings-section-nav button {
+  min-height: 68px;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  display: grid;
+  grid-template-columns: var(--space-6) 1fr var(--space-4);
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.settings-section-nav button:hover {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.settings-section-nav button.active {
+  color: var(--brand);
+  background: var(--surface-subtle);
+  box-shadow: none;
+}
+
+.settings-panel {
+  min-height: 520px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.settings-section-nav strong,
+.settings-section-nav small {
+  display: block;
+}
+
+.settings-section-nav strong {
+  font-size: var(--text-sm);
+}
+
+.settings-section-nav small {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-2xs);
+}
+
+.settings-panel-heading {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-panel-heading h2 {
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.settings-panel-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.settings-resource-list {
+  padding-top: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.settings-resource-list > a {
+  min-height: 68px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.settings-resource-list > a:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-muted);
+}
+
+.settings-resource-list strong,
+.settings-resource-list small {
+  display: block;
+}
+
+.settings-resource-list small {
+  margin-top: var(--space-1);
+  color: var(--muted);
+}
+
+.settings-resource-list svg {
+  flex: 0 0 auto;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.settings-resource-list > a:hover svg {
+  transform: translateX(3px);
+}
+
+.settings-subform + .settings-subform {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+}
+
+.profile-photo-setting {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.profile-photo-preview {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--lime);
+  color: var(--brand);
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.profile-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-photo-setting h3,
+.profile-photo-setting p {
+  margin: 0;
+}
+
+.profile-photo-setting h3 {
+  font-size: var(--text-sm);
+}
+
+.profile-photo-setting p {
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.profile-photo-setting > div > div {
+  margin-top: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.profile-photo-setting input[type='file'] {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.settings-subheading h3 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.settings-subheading p {
+  margin: var(--space-1) 0 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.pending-email {
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  background: var(--surface-muted);
+  font-size: var(--text-xs);
+}
+
+.session-list {
+  padding-block: var(--space-4);
+}
+
+.session-list article {
+  min-height: 76px;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.session-list article > div {
+  min-width: 0;
+}
+
+.session-list article > .button {
+  flex: none;
+}
+
+.session-list article:last-child {
+  border-bottom: 0;
+}
+
+.session-list article strong,
+.session-list article small {
+  display: block;
+}
+
+.session-list article small {
+  max-width: 100%;
+  margin-top: var(--space-1);
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-field-grid {
+  padding: var(--space-6) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.settings-field-grid input,
+.settings-field-grid select,
+.form-grid input,
+.form-grid select {
+  margin-top: 0;
+}
+
+.settings-actions {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.settings-preferences {
+  display: grid;
+}
+
+.settings-region-fields {
+  max-width: 760px;
+}
+
+.form-grid {
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.span-2 {
+  grid-column: 1 / -1;
+}
+
+/* A checkbox has no field label above it, so in a two-column form row it floats
+   against neighbouring inputs. Giving it its own bordered row keeps the baseline. */
+.form-toggle {
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  background: var(--surface-subtle);
+  cursor: pointer;
+}
+
+.form-toggle input {
+  width: var(--space-4);
+  height: var(--space-4);
+  margin-top: 2px;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+.form-toggle strong {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.form-toggle small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.form-toggle:focus-within {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+/* Shares the toggle's bordered row so a colour picker reads as a labelled
+   choice rather than an input that failed to render its value. */
+.form-swatch {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--surface-subtle);
+  cursor: pointer;
+}
+
+.form-swatch strong {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.form-swatch small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.form-swatch input[type='color'] {
+  width: 64px;
+  min-height: var(--control-sm);
+  cursor: pointer;
+}
+
+.form-swatch:focus-within {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+.field-readout {
+  min-height: var(--control-md);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  background: var(--surface-subtle);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.field-hint {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.field-error,
+.form-error {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--danger);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.form-error {
+  margin-bottom: 0;
+  padding: var(--space-3);
+  border: 1px solid #e2baba;
+  border-radius: var(--radius-sm);
+  background: #fff1f1;
+}
+
+.form-actions {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* Transaction import ------------------------------------------------------ */
+
+.import-panel {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.import-panel input[type='file'] {
+  width: 100%;
+}
+
+.import-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.import-summary > div {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.import-summary dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.import-summary dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.import-summary dd.negative {
+  color: var(--negative);
+}
+
+.import-problems > p {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--negative);
+  margin-bottom: var(--space-2);
+}
+
+.import-problems .ledger-row,
+.import-preview .ledger-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.import-problems .ledger-row small {
+  color: var(--negative);
+}
+
+.import-problems .ledger-row > span:not(:last-child),
+.import-preview .ledger-row > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.import-preview .ledger-row > span:first-child {
+  display: grid;
+}
+
+.import-preview .money-value {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.import-problems .ledger-list,
+.import-preview {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.category-manager-list {
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-manager-row {
+  min-height: 64px;
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: var(--mark-size) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.category-manager-row:last-child {
+  border-bottom: 0;
+}
+
+.category-manager-row strong,
+.category-manager-row small {
+  display: block;
+}
+
+.category-manager-row small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  text-transform: capitalize;
+}
+
+.category-manager-form.confirmation {
+  border-top: 0;
+}
+
+.confirmation {
+  padding: var(--space-6);
+}
+
+.confirmation p {
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.confirmation-body + .confirmation-actions {
+  margin-top: var(--space-6);
+}
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  padding: var(--space-6);
+  display: grid;
+  place-items: center;
+  background: rgb(10 22 18 / 0.56);
+}
+
+.modal {
+  width: min(600px, 100%);
+  /* Capped well below the viewport so a long form still floats with backdrop
+     above and below it, instead of filling the screen edge to edge and reading
+     as top-anchored. */
+  max-height: min(calc(100dvh - 96px), 760px);
+  --modal-gutter: 28px;
+  --modal-footer-pad: 20px;
+  --modal-field-gap: var(--space-5);
+  /* Deliberately larger than --modal-gutter. The top gutter sits above label text,
+     which carries its own half-leading, while this gap sits under a bordered
+     control with no optical air, so matching the numbers reads as cramped. */
+  --modal-footer-gap: 36px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  box-shadow: var(--shadow-overlay);
+}
+
+.modal-sm {
+  width: min(440px, 100%);
+}
+
+.modal > header {
+  flex: none;
+  padding: var(--modal-gutter);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.modal > header h2 {
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.modal > header p {
+  max-width: 460px;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.modal > header > .button {
+  flex: none;
+}
+
+.modal > .form-grid,
+.modal > .confirmation {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* The category list is the only scroll region here; letting the modal body
+   scroll too would stack two scrollbars on the same gesture. */
+.modal > .category-manager {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modal > .form-grid,
+.modal .category-manager-form {
+  padding: var(--modal-gutter);
+}
+
+/* Descendant, not child: the category manager's form is nested a level deeper but
+   needs the same field rhythm the footer gap is calculated against.
+   Bottom padding is dropped so the sticky footer can sit flush against the modal
+   edge without a negative bottom margin. A negative margin there is counted by the
+   footer's `bottom: 0` sticky constraint and hoists it up out of its grid row,
+   swallowing the gap above it. */
+.modal .form-grid {
+  gap: var(--modal-field-gap);
+  padding-bottom: 0;
+}
+
+.modal > .confirmation {
+  padding: var(--modal-gutter);
+}
+
+.modal .form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  /* The grid row gap already contributes --modal-field-gap, so only the remainder
+     is added here to land on --modal-footer-gap in total. */
+  margin: calc(var(--modal-footer-gap) - var(--modal-field-gap)) calc(var(--modal-gutter) * -1) 0;
+  padding: var(--modal-footer-pad) var(--modal-gutter)
+    calc(var(--modal-footer-pad) + env(safe-area-inset-bottom));
+  background: var(--surface);
+  /* The divider is the box-shadow alone; the base rule's border-top would stack a
+     second line directly beneath it. */
+  border-top: 0;
+  box-shadow: 0 -1px 0 var(--border);
+}
+
+.modal .form-actions .button,
+.modal .confirmation-actions .button {
+  min-width: 112px;
+}
+
+.category-manager {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal .category-manager-row {
+  padding-inline: var(--modal-gutter);
+}
+
+.category-manager-list {
+  flex: 1 1 auto;
+  min-height: 96px;
+  background: var(--surface-subtle);
+}
+
+.category-manager-form {
+  flex: none;
+}
+
+.empty-state,
+.error-state {
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+}
+
+.empty-state-mark {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-4);
+  border-radius: var(--radius-tile);
+  display: grid;
+  place-items: center;
+  background: color-mix(in oklab, var(--lime) 28%, var(--surface));
+  color: var(--brand);
+}
+
+.empty-state h3,
+.error-state h2 {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.empty-state p,
+.error-state p {
+  margin: 0 auto var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.skeleton {
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, #e8e9e3 25%, #f4f4ef 50%, #e8e9e3 75%);
+  background-size: 200% 100%;
+  animation: skeleton-wave 1.4s linear infinite;
+}
+
+.skeleton-title {
+  width: 260px;
+  height: var(--space-8);
+  margin-bottom: var(--space-6);
+}
+
+.skeleton-card {
+  height: 320px;
+}
+
+.position-skeleton {
+  height: 160px;
+  margin-bottom: var(--space-6);
+}
+
+.overview-detail-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--space-6);
+}
+
+.overview-chart-skeleton {
+  height: 320px;
+}
+
+.toast-region {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 120;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.toast {
+  min-width: 280px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--radius-sm);
+  background: var(--sidebar);
+  color: var(--sidebar-text);
+  box-shadow: var(--shadow-overlay);
+  font-size: var(--text-sm);
+  animation: toast-enter var(--duration-normal) var(--ease-standard) both;
+}
+
+.toast-success {
+  border-color: color-mix(in oklab, var(--positive) 48%, var(--sidebar-border));
+}
+
+.toast-error {
+  border-color: color-mix(in oklab, var(--danger) 62%, var(--sidebar-border));
+  background: color-mix(in oklab, var(--danger) 34%, var(--sidebar));
+}

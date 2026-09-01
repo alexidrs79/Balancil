@@ -234,6 +234,7 @@ class GoalContributionTest extends TestCase
         $service->backfillFromExistingSaved();
         $service->backfillFromExistingSaved();
 
+        Sanctum::actingAs($user);
         $this->assertSame(350.25, (float) $legacy->refresh()->saved);
         $this->assertSame(75.0, (float) $tracked->refresh()->saved);
         $this->assertSame(0.0, (float) $zero->refresh()->saved);

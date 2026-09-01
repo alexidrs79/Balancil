@@ -5,11 +5,72 @@ namespace App\Services;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class TransactionService
 {
+    /**
+     * The ledger query behind both the paginated rows and their totals, so a page
+     * of results and the summary above it can never disagree.
+     *
+     * @param  array<string, mixed>  $filters
+     */
+    public function filtered(User $user, array $filters): Builder
+    {
+        $query = $user->transactions()->getQuery();
+
+        if ($search = $filters['search'] ?? null) {
+            // lower() rather than ILIKE so the same query works on SQLite and Postgres.
+            $term = '%'.mb_strtolower(trim($search)).'%';
+            $query->where(fn (Builder $matches) => $matches
+                ->whereRaw('lower(merchant) like ?', [$term])
+                ->orWhereRaw('lower(description) like ?', [$term]));
+        }
+        foreach (['categoryId' => 'category_id', 'accountId' => 'account_id', 'type' => 'type', 'status' => 'status'] as $key => $column) {
+            if ($value = $filters[$key] ?? null) {
+                $query->where($column, $value);
+            }
+        }
+        if ($from = $filters['dateFrom'] ?? null) {
+            $query->whereDate('date', '>=', $from);
+        }
+        if ($to = $filters['dateTo'] ?? null) {
+            $query->whereDate('date', '<=', $to);
+        }
+
+        // Every ordering ends with a unique column so paging cannot repeat or skip
+        // a row when two transactions share a date or amount.
+        return match ($filters['sort'] ?? 'newest') {
+            'oldest' => $query->oldest('date')->orderBy('id'),
+            'highest' => $query->orderByDesc('amount')->orderBy('id'),
+            'lowest' => $query->orderBy('amount')->orderBy('id'),
+            default => $query->latest('date')->orderByDesc('id'),
+        };
+    }
+
+    /**
+     * Totals for the whole filtered ledger, not just the page being shown.
+     *
+     * @return array<string, float|int>
+     */
+    public function summarize(User $user, Builder $query): array
+    {
+        $completed = (clone $query)->reorder()->where('status', 'completed');
+        $income = (float) (clone $completed)->where('type', 'income')->sum('amount');
+        $expenses = (float) (clone $completed)->where('type', 'expense')->sum('amount');
+
+        return [
+            'income' => round($income, 2),
+            'expenses' => round($expenses, 2),
+            'savings' => round($income - $expenses, 2),
+            'completedCount' => (clone $completed)->count(),
+            // The unfiltered size of the ledger, so the UI can say "12 of 340".
+            'ledgerTotal' => $user->transactions()->count(),
+        ];
+    }
+
     public function create(User $user, array $data): Transaction
     {
         return DB::transaction(function () use ($user, $data) {

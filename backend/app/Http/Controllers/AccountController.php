@@ -31,7 +31,7 @@ class AccountController extends Controller
 
     public function destroy(Account $account)
     {
-        if ($account->transactions()->exists() || $this->hasTransfers($account)) {
+        if ($this->hasActivity($account)) {
             return response()->json(['message' => 'Accounts with transactions cannot be deleted.'], 409);
         }
         if ($account->recurringTransactions()->exists()) {
@@ -46,11 +46,26 @@ class AccountController extends Controller
 
     private function map(array $data, ?Account $account = null): array
     {
-        return [
-            'name' => $data['name'], 'type' => $data['type'], 'balance' => $data['balance'] ?? $account?->balance ?? 0,
+        $fields = [
+            'name' => $data['name'], 'type' => $data['type'],
             'institution' => $data['institution'], 'color' => $data['color'],
             'is_active' => $data['isActive'] ?? true,
         ];
+
+        // A balance is only settable while the account has no activity; after that the
+        // ledger maintains it. The opening balance moves with it, and only with it, so
+        // that ledger:reconcile has an independent figure to check against.
+        if (array_key_exists('balance', $data) && ($account === null || ! $this->hasActivity($account))) {
+            $fields['balance'] = $data['balance'];
+            $fields['opening_balance'] = $data['balance'];
+        }
+
+        return $fields;
+    }
+
+    private function hasActivity(Account $account): bool
+    {
+        return $account->transactions()->exists() || $this->hasTransfers($account);
     }
 
     /** Re-read the row with its movement sums so the response can explain the balance. */

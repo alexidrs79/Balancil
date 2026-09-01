@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Account;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -40,7 +42,7 @@ class IsolationTest extends TestCase
         Sanctum::actingAs($stranger);
 
         $this->getJson('/api/accounts')->assertOk()->assertJsonCount(0);
-        $this->getJson('/api/transactions')->assertOk()->assertJsonCount(0);
+        $this->getJson('/api/transactions')->assertOk()->assertJsonCount(0, 'data');
         $this->getJson('/api/budgets')->assertOk()->assertJsonCount(0);
         $this->getJson('/api/goals')->assertOk()->assertJsonCount(0);
 
@@ -64,5 +66,38 @@ class IsolationTest extends TestCase
             'deadline' => now()->addMonth()->toDateString(), 'color' => '#000000',
         ])->assertNotFound();
         $this->deleteJson('/api/goals/'.$goal->id)->assertNotFound();
+    }
+
+    /**
+     * The owner scope is fail-closed: with no authenticated user a query returns
+     * nothing rather than every user's rows. Console and queue code that legitimately
+     * spans users must say so with withoutGlobalScope('owned').
+     */
+    public function test_owned_models_return_nothing_when_no_user_is_authenticated(): void
+    {
+        $alice = User::factory()->create();
+        $bob = User::factory()->create();
+        foreach ([$alice, $bob] as $user) {
+            $user->accounts()->create([
+                'name' => 'Checking', 'type' => 'checking', 'balance' => 100,
+                'institution' => 'Bank', 'color' => '#111111',
+            ]);
+            $user->categories()->create([
+                'name' => 'Food', 'type' => 'expense', 'color' => '#f00', 'icon' => 'food',
+            ]);
+        }
+
+        // No Sanctum::actingAs here, standing in for a job or console command.
+        $this->assertSame(0, Account::count());
+        $this->assertSame(0, Category::count());
+
+        // Opting out explicitly is the only way to reach across users.
+        $this->assertSame(2, Account::withoutGlobalScope('owned')->count());
+        $this->assertSame(2, Category::withoutGlobalScope('owned')->count());
+
+        // And an authenticated caller still sees only their own rows.
+        Sanctum::actingAs($alice);
+        $this->assertSame(1, Account::count());
+        $this->assertSame(1, Category::count());
     }
 }

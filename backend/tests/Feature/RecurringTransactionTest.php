@@ -107,8 +107,8 @@ class RecurringTransactionTest extends TestCase
 
         $this->artisan('recurring:generate-drafts')->assertSuccessful();
 
-        $this->assertSame(0, $westUser->recurringDueDrafts()->count());
-        $this->assertSame(1, $eastUser->recurringDueDrafts()->count());
+        $this->assertSame(0, $westUser->recurringDueDrafts()->withoutGlobalScope('owned')->count());
+        $this->assertSame(1, $eastUser->recurringDueDrafts()->withoutGlobalScope('owned')->count());
     }
 
     public function test_generation_catches_up_month_end_without_duplicates(): void

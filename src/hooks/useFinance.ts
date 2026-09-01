@@ -1,5 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { financeApi, type AnalyticsRange } from '../services/financeService';
+import type { TransactionQuery } from '../types';
 import { authApi } from '../services/authService';
 
 export const queryKeys = {
@@ -7,6 +8,7 @@ export const queryKeys = {
   accounts: ['accounts'] as const,
   categories: ['categories'] as const,
   transactions: ['transactions'] as const,
+  transactionPage: (query: TransactionQuery) => ['transactions', query] as const,
   recurringTransactions: ['recurring-transactions'] as const,
   recurringDrafts: ['recurring-drafts', 'pending'] as const,
   transfers: ['transfers'] as const,
@@ -60,8 +62,35 @@ export const useAccountMutations = () => {
   };
 };
 
-export const useTransactions = () =>
-  useQuery({ queryKey: queryKeys.transactions, queryFn: financeApi.getTransactions });
+/**
+ * Import touches balances, budgets and every derived view, so a successful run
+ * refreshes the same things a manual entry would.
+ */
+export const useTransactionImport = () => {
+  const queryClient = useQueryClient();
+  return {
+    preview: useMutation({ mutationFn: financeApi.previewTransactionImport }),
+    commit: useMutation({
+      mutationFn: financeApi.importTransactions,
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: queryKeys.transactions });
+        void queryClient.invalidateQueries({ queryKey: queryKeys.accounts });
+        void queryClient.invalidateQueries({ queryKey: queryKeys.dashboard });
+        void queryClient.invalidateQueries({ queryKey: queryKeys.budgets });
+        void queryClient.invalidateQueries({ queryKey: ['analytics'] });
+      },
+    }),
+  };
+};
+
+export const useTransactions = (query: TransactionQuery = {}) =>
+  useQuery({
+    queryKey: queryKeys.transactionPage(query),
+    queryFn: () => financeApi.getTransactions(query),
+    // Keep the previous page on screen while the next one loads, so paging and
+    // filtering never flash an empty table.
+    placeholderData: keepPreviousData,
+  });
 
 export const useRecurringTransactions = () =>
   useQuery({

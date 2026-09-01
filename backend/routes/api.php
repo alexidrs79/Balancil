@@ -36,6 +36,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/analytics', AnalyticsController::class);
     Route::apiResource('categories', CategoryController::class)->except('show');
     Route::apiResource('accounts', AccountController::class)->except('show');
+    // Registered before the resource routes so neither path is shadowed.
+    Route::get('/transactions/export', [TransactionController::class, 'export']);
+    Route::post('/transactions/import', [TransactionController::class, 'import'])
+        ->middleware('throttle:20,1');
     Route::apiResource('transactions', TransactionController::class)->except('show');
     Route::apiResource('recurring-transactions', RecurringTransactionController::class);
     Route::get('/recurring-drafts/pending', [RecurringDueDraftController::class, 'pending']);

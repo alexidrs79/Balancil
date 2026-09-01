@@ -54,9 +54,11 @@ class GoalContributionService
 
     public function backfillFromExistingSaved(): void
     {
+        // Runs from a migration with no authenticated user, so both the goals and
+        // the contributions existence check must opt out of the owner scope.
         Goal::withoutGlobalScopes()
             ->where('saved', '!=', 0)
-            ->whereDoesntHave('contributions')
+            ->whereDoesntHave('contributions', fn ($contributions) => $contributions->withoutGlobalScope('owned'))
             ->orderBy('id')
             ->each(function (Goal $goal) {
                 $this->insertMatchingCurrentSaved($goal);

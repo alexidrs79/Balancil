@@ -1,11 +1,4 @@
-import type {
-  Budget,
-  BudgetStatus,
-  FinanceSummary,
-  Goal,
-  Transaction,
-  TransactionFilters,
-} from '../types';
+import type { Budget, BudgetStatus, Goal, TransactionFilters } from '../types';
 import { formatDateInput } from './currency';
 
 export { formatCompactCurrency, formatCurrency, formatDate, formatDateInput } from './currency';
@@ -18,45 +11,6 @@ export const budgetStatus = (budget: Pick<Budget, 'spent' | 'limit'>): BudgetSta
   if (percentage >= 100) return 'exceeded';
   if (percentage >= 80) return 'warning';
   return 'healthy';
-};
-
-export const calculateSummary = (transactions: Transaction[]): FinanceSummary =>
-  transactions.reduce(
-    (summary, transaction) => {
-      if (transaction.status !== 'completed') return summary;
-      if (transaction.type === 'income') summary.income += transaction.amount;
-      else summary.expenses += transaction.amount;
-      summary.savings = summary.income - summary.expenses;
-      return summary;
-    },
-    { income: 0, expenses: 0, savings: 0 },
-  );
-
-export const filterTransactions = (transactions: Transaction[], filters: TransactionFilters) => {
-  const search = filters.search?.trim().toLowerCase() ?? '';
-  return transactions
-    .filter((transaction) => {
-      const transactionDate = transaction.date.slice(0, 10);
-      const matchesSearch =
-        !search ||
-        transaction.merchant.toLowerCase().includes(search) ||
-        transaction.description.toLowerCase().includes(search);
-      return (
-        matchesSearch &&
-        (!filters.categoryId || transaction.categoryId === filters.categoryId) &&
-        (!filters.accountId || transaction.accountId === filters.accountId) &&
-        (!filters.type || transaction.type === filters.type) &&
-        (!filters.status || transaction.status === filters.status) &&
-        (!filters.dateFrom || transactionDate >= filters.dateFrom) &&
-        (!filters.dateTo || transactionDate <= filters.dateTo)
-      );
-    })
-    .sort((a, b) => {
-      if (filters.sort === 'oldest') return a.date.localeCompare(b.date);
-      if (filters.sort === 'highest') return b.amount - a.amount;
-      if (filters.sort === 'lowest') return a.amount - b.amount;
-      return b.date.localeCompare(a.date);
-    });
 };
 
 export const goalProgress = (goal: Pick<Goal, 'saved' | 'target'>) =>
@@ -98,26 +52,3 @@ export const hiddenTransactionFilterCount = (filters: TransactionFilters) =>
   [filters.categoryId, filters.accountId, filters.status, filters.dateFrom, filters.dateTo].filter(
     Boolean,
   ).length;
-
-export interface PaginationResult<T> {
-  items: T[];
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-}
-
-export function paginate<T>(items: T[], page = 1, pageSize = 10): PaginationResult<T> {
-  const safePageSize = Math.max(1, Math.floor(pageSize));
-  const totalPages = Math.max(1, Math.ceil(items.length / safePageSize));
-  const safePage = Math.min(Math.max(1, Math.floor(page)), totalPages);
-  const start = (safePage - 1) * safePageSize;
-
-  return {
-    items: items.slice(start, start + safePageSize),
-    page: safePage,
-    pageSize: safePageSize,
-    totalItems: items.length,
-    totalPages,
-  };
-}

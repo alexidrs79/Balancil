@@ -69,6 +69,21 @@ no accounts or history.
 - Categories used by transactions or budgets cannot be deleted.
 - Budget spending is completed expenses in the budget’s current period.
 - Dashboard and analytics are computed by the API.
+- `GET /api/transactions` is paginated (`page`, `perPage`, max 100) and does its own
+  filtering, search, and sorting. Each response carries `meta` for the pager and a
+  `summary` covering the whole filtered ledger, not just the page on screen. The
+  client never downloads the full ledger to filter it.
+- Records are scoped to their owner by a global query scope that is fail-closed: with
+  no authenticated user a query returns nothing. Console and queue code that spans
+  users opts out explicitly.
+- Transactions import and export as CSV. Export writes whatever the current filters
+  describe. Import is two steps: a preview reports every problem and every row already
+  in the ledger, and nothing is written until it is confirmed. A file with any bad row
+  is refused outright rather than half-loaded, and rows already present are skipped so
+  re-importing the same file cannot double a balance.
+- An account records its opening balance independently of its current one, so
+  `php artisan ledger:reconcile` can check every stored balance against the
+  transactions and transfers behind it.
 - Settings can delete the entire Balancil account and its ledger rows.
 
 ## Production (go live)
@@ -92,13 +107,18 @@ no accounts or history.
    Netlify header files. Add HSTS after every route works over HTTPS.
 10. Run Laravel’s scheduler every minute so recurring drafts are generated:
     `* * * * * cd /path/to/backend && php artisan schedule:run >> /dev/null 2>&1`.
-11. Smoke: register → add account → add transaction → see it on overview →
-    change password → sign out → sign in → forgot password email → delete
-    account on a throwaway user.
+11. Run `php artisan ledger:reconcile` on a schedule as well. Investigate before
+    reaching for `--fix`: drift means something upstream wrote a balance wrongly.
+12. Smoke: register → add account → add transaction → see it on overview →
+    change password → sign out → sign in → forgot password email → export CSV →
+    re-import it and confirm nothing doubles → delete account on a throwaway user.
 
 Health: `GET /up` (Laravel) and `GET /` on the API returns `{ "ok": true, "name": "Balancil" }`.
 
 ## Commands
+
+CI runs all of the below on every push and pull request
+(`.github/workflows/ci.yml`).
 
 Frontend:
 
@@ -118,6 +138,9 @@ php artisan migrate
 php artisan test
 vendor/bin/pint --test
 php artisan route:list --path=api
+
+# Check every account balance against its ledger. --fix rewrites drifted balances.
+php artisan ledger:reconcile
 ```
 
 ## Architecture
@@ -128,8 +151,13 @@ src/
   components/    Shared interface and visualization components
   contexts/      Auth session restoration and state
   hooks/         TanStack Query server-state hooks
-  pages/         Marketing, auth, legal, and application routes
+  pages/         Marketing, auth, and legal routes
+    overview/    Dashboard, accounts, analytics
+    transactions/  Ledger, filters, transaction and recurring modals
+    goals/       Goals and contributions
+    settings/    Profile, sessions, preferences, account deletion
   services/      Laravel REST service boundary
+  styles/        One cascade split into ordered parts; index.css imports them
   types/         Shared frontend contracts
   utils/         Formatting and client-side calculations
 
