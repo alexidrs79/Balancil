@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from '../components/Logo';
+import { useRevealOnScroll } from '../hooks/useRevealOnScroll';
 import audienceImage from '../assets/landing/audience.jpg';
 import purposeImage from '../assets/landing/purpose.jpg';
 import securityImage from '../assets/landing/security.jpg';
@@ -104,6 +105,7 @@ function useHeaderDetached() {
 
 export function LandingPage() {
   const isDetached = useHeaderDetached();
+  useRevealOnScroll();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -192,7 +194,7 @@ export function LandingPage() {
 
       <div id="landing-content" inert={menuOpen}>
         <section className="landing-hero" id="product">
-          <div className="landing-hero-copy">
+          <div className="landing-hero-copy" data-reveal>
             <p className="landing-kicker">A manual personal ledger</p>
             <h1>Keep your money records in one place.</h1>
             <p className="landing-hero-lede">
@@ -213,6 +215,7 @@ export function LandingPage() {
           <div
             className="landing-product-preview balancil-box"
             aria-label="Sample Balancil ledger illustration"
+            data-reveal="late"
           >
             <header>
               <strong>Sample ledger</strong>
@@ -239,7 +242,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-purpose" aria-labelledby="landing-purpose-title">
+        <section className="landing-purpose" aria-labelledby="landing-purpose-title" data-reveal>
           <div>
             <p className="landing-kicker">Account balances</p>
             <h2 id="landing-purpose-title">See your recorded balances together.</h2>
@@ -269,12 +272,12 @@ export function LandingPage() {
         </section>
 
         <section className="landing-steps" id="how-it-works" aria-labelledby="landing-steps-title">
-          <div className="landing-steps-copy">
+          <div className="landing-steps-copy" data-reveal>
             <p className="landing-kicker">How it works</p>
             <h2 id="landing-steps-title">Start with three simple steps.</h2>
           </div>
           <ol className="landing-steps-list">
-            <li>
+            <li data-reveal>
               <SectionPhoto src={stepOneImage} className="landing-step-photo" />
               {/* The list already conveys order, so the visible numeral is decorative. */}
               <span className="landing-step-mark" aria-hidden="true">
@@ -285,7 +288,7 @@ export function LandingPage() {
                 A new Balancil account starts with no balances, transactions, budgets, or goals.
               </p>
             </li>
-            <li>
+            <li data-reveal>
               <SectionPhoto src={stepTwoImage} className="landing-step-photo" />
               <span className="landing-step-mark" aria-hidden="true">
                 2
@@ -296,7 +299,7 @@ export function LandingPage() {
                 your bank.
               </p>
             </li>
-            <li>
+            <li data-reveal>
               <SectionPhoto src={stepThreeImage} className="landing-step-photo" />
               <span className="landing-step-mark" aria-hidden="true">
                 3
@@ -310,7 +313,7 @@ export function LandingPage() {
           </ol>
         </section>
 
-        <section className="landing-capability" id="accounts">
+        <section className="landing-capability" id="accounts" data-reveal>
           <div className="landing-capability-copy">
             <p className="landing-kicker">Accounts</p>
             <h2>Keep each balance in one list.</h2>
@@ -334,7 +337,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-capability is-reversed" id="transactions">
+        <section className="landing-capability is-reversed" id="transactions" data-reveal>
           <div className="landing-capability-copy">
             <p className="landing-kicker">Transactions</p>
             <h2>Record income and expenses.</h2>
@@ -360,7 +363,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-capability" id="planning">
+        <section className="landing-capability" id="planning" data-reveal>
           <div className="landing-capability-copy">
             <p className="landing-kicker">Budgets and goals</p>
             <h2>Track limits and savings targets.</h2>
@@ -396,7 +399,11 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-breakdown" aria-labelledby="landing-breakdown-title">
+        <section
+          className="landing-breakdown"
+          aria-labelledby="landing-breakdown-title"
+          data-reveal
+        >
           <div className="landing-breakdown-copy">
             <p className="landing-kicker">Analytics</p>
             <h2 id="landing-breakdown-title">Review spending by category.</h2>
@@ -430,7 +437,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="landing-trust" id="security">
+        <section className="landing-trust" id="security" data-reveal>
           <div>
             <p className="landing-kicker">Security and data</p>
             <h2>Your records belong to your account.</h2>
@@ -463,7 +470,7 @@ export function LandingPage() {
           <SectionPhoto src={securityImage} className="landing-trust-photo" />
         </section>
 
-        <section className="landing-audience" aria-labelledby="landing-audience-title">
+        <section className="landing-audience" aria-labelledby="landing-audience-title" data-reveal>
           <div className="landing-audience-copy">
             <p className="landing-kicker">Who it is for</p>
             <h2 id="landing-audience-title">For people who keep their own records.</h2>
@@ -494,7 +501,7 @@ export function LandingPage() {
           </ul>
         </section>
 
-        <section className="landing-cta">
+        <section className="landing-cta" data-reveal>
           <h2>Start your personal ledger.</h2>
           <Link className="button" to="/register">
             Create an account
@@ -502,7 +509,7 @@ export function LandingPage() {
         </section>
       </div>
 
-      <footer className="landing-footer">
+      <footer className="landing-footer" data-reveal>
         <div>
           <Link className="brand" to="/">
             <Logo />

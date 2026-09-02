@@ -171,10 +171,29 @@ function ScrollToTop() {
   const navigationType = useNavigationType();
 
   useEffect(() => {
-    // Back and forward keep the position the browser restored, and in-page
-    // anchors own their own target.
-    if (navigationType === 'POP' || hash) return;
-    window.scrollTo(0, 0);
+    if (!hash) {
+      // Back and forward keep the position the browser restored.
+      if (navigationType !== 'POP') window.scrollTo(0, 0);
+      return;
+    }
+
+    // Routes are lazy, so the anchor does not exist yet when the browser tries to
+    // jump to it. Retry until the target renders or the budget runs out.
+    const target = decodeURIComponent(hash.slice(1));
+    const deadline = Date.now() + 2000;
+    let frame = 0;
+
+    const jump = () => {
+      const element = document.getElementById(target);
+      if (element) {
+        element.scrollIntoView();
+        return;
+      }
+      if (Date.now() < deadline) frame = requestAnimationFrame(jump);
+    };
+
+    frame = requestAnimationFrame(jump);
+    return () => cancelAnimationFrame(frame);
   }, [pathname, hash, navigationType]);
 
   return null;

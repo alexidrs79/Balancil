@@ -12,6 +12,7 @@
 }
 
 .error-page-header {
+  animation: section-enter var(--duration-slow) var(--ease-standard) both;
   min-height: 76px;
   padding: 0 max(var(--space-6), calc((100vw - 1240px) / 2));
   border-bottom: 1px solid var(--border);
@@ -38,6 +39,9 @@
   border-radius: var(--radius-card);
   background: var(--surface);
   text-align: center;
+  /* The code, heading, lead, and actions enter as one beat rather than staggering
+     a message the reader wants immediately. */
+  animation: section-enter 620ms 100ms var(--ease-standard) both;
 }
 
 .error-code {
@@ -144,6 +148,16 @@
 .legal-page {
   min-height: 100vh;
   background: var(--bg);
+}
+
+/* A single load entrance, reusing the product's section motion. The sticky sidebar
+   is deliberately left alone: an animated transform on it fights its own stickiness. */
+.legal-page > .legal-header {
+  animation: section-enter var(--duration-slow) var(--ease-standard) both;
+}
+
+.legal-page .legal-article {
+  animation: section-enter 620ms 100ms var(--ease-standard) both;
 }
 
 .legal-header {
