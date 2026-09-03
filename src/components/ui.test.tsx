@@ -2,7 +2,14 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { Button, ConfirmDialog, Modal, ToastProvider, useToast } from '../components/ui';
+import {
+  Button,
+  ConfirmDialog,
+  ErrorState,
+  Modal,
+  ToastProvider,
+  useToast,
+} from '../components/ui';
 
 describe('Button', () => {
   it('renders accessible button text and handles clicks', async () => {
@@ -24,6 +31,23 @@ describe('Button', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Disabled' }));
     expect(onClick).not.toHaveBeenCalled();
+  });
+});
+
+describe('ErrorState', () => {
+  it('announces the error and offers a retry action', async () => {
+    const onRetry = vi.fn();
+    render(
+      <ErrorState
+        title="Transactions are unavailable"
+        description="Try again in a moment."
+        onRetry={onRetry}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Transactions are unavailable');
+    await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(onRetry).toHaveBeenCalledTimes(1);
   });
 });
 

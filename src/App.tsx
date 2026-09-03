@@ -72,7 +72,7 @@ const publicMetadata: Record<string, { title: string; description: string }> = {
   '/': {
     title: 'Balancil — Manual personal ledger',
     description:
-      'Record account balances, transactions, budgets, and savings goals in one personal ledger.',
+      'Record account balances, transactions, budgets, and savings goals in one manual personal ledger.',
   },
   '/login': {
     title: 'Sign in — Balancil',
@@ -85,6 +85,14 @@ const publicMetadata: Record<string, { title: string; description: string }> = {
   '/forgot-password': {
     title: 'Reset your password — Balancil',
     description: 'Request a password reset link for your Balancil account.',
+  },
+  '/reset-password': {
+    title: 'Choose a new password — Balancil',
+    description: 'Choose a new password for your Balancil account.',
+  },
+  '/confirm-email-change': {
+    title: 'Confirm email change — Balancil',
+    description: 'Confirm a requested email change for your Balancil account.',
   },
   '/privacy': {
     title: 'Privacy policy — Balancil',

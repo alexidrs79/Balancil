@@ -290,14 +290,16 @@
   border-radius: var(--radius-pill);
   background: currentColor;
   content: '';
-  transition: width 160ms ease-out;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 160ms ease-out;
 }
 
 .landing-simple .landing-nav-actions > a:not(.button):hover::after,
 .landing-simple .landing-footer nav a:hover::after,
 .auth-form a:hover::after,
 .auth-switch a:hover::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
 .landing-simple .landing-nav-actions > a:not(.button):hover,
@@ -502,6 +504,21 @@
 .category-analysis-row > div,
 .overview-insight-progress {
   border-radius: var(--radius-pill);
+}
+
+.chart-legend > span {
+  width: var(--space-2);
+  height: var(--space-2);
+  margin-left: var(--space-2);
+  border-radius: 50%;
+}
+
+.chart-legend > span.income {
+  background: #8eb51d;
+}
+
+.chart-legend > span.expense {
+  background: #34443f;
 }
 
 @keyframes skeleton-wave {

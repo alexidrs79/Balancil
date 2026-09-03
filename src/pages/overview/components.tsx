@@ -32,11 +32,13 @@ export function ChartTooltip({
 export function SectionHeader({
   label,
   title,
+  titleId,
   detail,
   action,
 }: {
   label?: string;
   title: string;
+  titleId?: string;
   detail?: string;
   action?: ReactNode;
 }) {
@@ -44,7 +46,7 @@ export function SectionHeader({
     <header className="data-heading">
       <div>
         {label && <p className="data-label">{label}</p>}
-        <h2>{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         {detail && <p className="data-detail">{detail}</p>}
       </div>
       {action}

@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Button,
-  Card,
   ConfirmDialog,
   EmptyState,
+  ErrorState,
   LedgerList,
   LedgerRow,
   Modal,
@@ -30,7 +30,7 @@ const budgetSchema = z.object({
 });
 
 export function BudgetsPage() {
-  const { data = [], isLoading, isError } = useBudgets();
+  const { data = [], isLoading, isError, refetch } = useBudgets();
   const { data: categories = [] } = useCategories();
   const mutations = useBudgetMutations();
   const notify = useToast();
@@ -106,10 +106,11 @@ export function BudgetsPage() {
             ))}
           </div>
         ) : (
-          <Card className="error-state" role="alert">
-            <h2>Budgets are unavailable</h2>
-            <p>Refresh and try again.</p>
-          </Card>
+          <ErrorState
+            title="Budgets are unavailable"
+            description="Please try again."
+            onRetry={() => void refetch()}
+          />
         )}
       </div>
     );

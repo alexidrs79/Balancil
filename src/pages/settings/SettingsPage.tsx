@@ -1,7 +1,7 @@
 import { Cards, ChevronRight, Lock, Shield, Trash, User } from '../../components/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EmptyState, PageHeader, Skeleton, useToast } from '../../components/ui';
+import { ErrorState, PageHeader, Skeleton, useToast } from '../../components/ui';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings, useSettingsMutations } from '../../hooks/useFinance';
 import { formatDate } from '../../utils/finance';
@@ -43,7 +43,7 @@ const settingSections = [
 export function SettingsPage() {
   const [section, setSection] = useState('profile');
   const notify = useToast();
-  const { data: settings, isLoading, isError } = useSettings();
+  const { data: settings, isLoading, isError, refetch } = useSettings();
   const mutations = useSettingsMutations();
   const { updateUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -60,9 +60,10 @@ export function SettingsPage() {
   if (isError || !settings) {
     return (
       <div className="page product-page settings-page">
-        <EmptyState
+        <ErrorState
           title="Settings are unavailable"
-          description="Refresh the page and try again."
+          description="Please try again."
+          onRetry={() => void refetch()}
         />
       </div>
     );

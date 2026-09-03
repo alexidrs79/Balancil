@@ -57,6 +57,19 @@ describe('route metadata', () => {
     );
   });
 
+  it.each([
+    ['/reset-password', 'Choose a new password — Balancil'],
+    ['/confirm-email-change', 'Confirm email change — Balancil'],
+  ])('sets sensitive route metadata for %s', async (path, title) => {
+    renderMetadata(path);
+
+    await waitFor(() => expect(document.title).toBe(title));
+    expect(document.querySelector('meta[name="robots"]')).toHaveAttribute(
+      'content',
+      'noindex, nofollow',
+    );
+  });
+
   it('titles an unknown address as not found and keeps it unindexed', async () => {
     renderMetadata('/no-such-page');
 
@@ -82,11 +95,14 @@ describe('not found pages', () => {
     );
   }
 
-  it('offers a way home and a way to sign in for signed-out visitors', () => {
+  it('offers recovery and policy links for signed-out visitors', () => {
     const { getByRole, queryByText } = renderNotFound('/mistyped-link');
 
     expect(getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
-    expect(getByRole('link', { name: /Sign in/ })).toHaveAttribute('href', '/login');
+    expect(getByRole('link', { name: /Create an account/ })).toHaveAttribute('href', '/register');
+    expect(getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/login');
+    expect(getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
+    expect(getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
     expect(queryByText(/ledger has changed/i)).not.toBeInTheDocument();
     expect(queryByText(/^Requested$/i)).not.toBeInTheDocument();
   });

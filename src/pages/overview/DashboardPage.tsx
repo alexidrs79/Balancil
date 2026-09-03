@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { Card, Skeleton, AnimatedValue, TrendBadge } from '../../components/ui';
+import { ErrorState, Skeleton, AnimatedValue, TrendBadge } from '../../components/ui';
 import { AccountMark, CategoryMark, MiniSparkline, TextLink } from '../../components/visuals';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDashboard } from '../../hooks/useFinance';
@@ -26,13 +26,14 @@ import {
 import { ChartTooltip, SectionHeader, TransactionRow } from './components';
 
 export function DashboardPage() {
-  const { data, isLoading, isError } = useDashboard();
+  const { data, isLoading, isError, refetch } = useDashboard();
   const { user } = useAuth();
   const compactChart = useMediaQuery('(max-width: 768px)');
 
   if (isLoading) {
     return (
-      <div className="page product-page overview-page">
+      <div className="page product-page overview-page" aria-busy="true">
+        <span className="sr-only">Loading overview</span>
         <Skeleton className="skeleton-title" />
         <Skeleton className="position-skeleton" />
         <div className="overview-detail-grid">
@@ -46,10 +47,11 @@ export function DashboardPage() {
   if (isError || !data) {
     return (
       <div className="page product-page">
-        <Card className="error-state" role="alert">
-          <h2>We couldn’t load your overview</h2>
-          <p>Please refresh and try again.</p>
-        </Card>
+        <ErrorState
+          title="We couldn’t load your overview"
+          description="Please try again."
+          onRetry={() => void refetch()}
+        />
       </div>
     );
   }
@@ -73,6 +75,7 @@ export function DashboardPage() {
       category: data.categories.find((category) => category.id === budget.categoryId),
       percent: budget.limit > 0 ? Math.round((budget.spent / budget.limit) * 100) : 0,
     }))
+    .filter((budget) => budget.percent >= 80)
     .sort((a, b) => b.percent - a.percent)[0];
   const flowMonths = data.monthlyTrend.length;
   const hasFlowActivity = data.monthlyTrend.some((month) => month.income > 0 || month.expenses > 0);
@@ -319,15 +322,17 @@ export function DashboardPage() {
             <SectionHeader
               label="Money flow"
               title="How your money is changing"
+              titleId="money-flow-title"
               detail={flowDetail}
               action={
                 <span className="chart-legend">
-                  <i className="income" /> Income <i className="expense" /> Expenses
+                  <span className="income" aria-hidden="true" /> Income{' '}
+                  <span className="expense" aria-hidden="true" /> Expenses
                 </span>
               }
             />
             <div className="chart-frame">
-              <div className="primary-chart" id="money-flow-title">
+              <div className="primary-chart" aria-hidden="true">
                 {hasFlowActivity ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
@@ -400,6 +405,25 @@ export function DashboardPage() {
                   </div>
                 )}
               </div>
+              <table className="sr-only">
+                <caption>Monthly income and expenses</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Month</th>
+                    <th scope="col">Income</th>
+                    <th scope="col">Expenses</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.monthlyTrend.map((month) => (
+                    <tr key={month.period}>
+                      <th scope="row">{formatAnalyticsMonth(month.period, true)}</th>
+                      <td>{formatCurrency(month.income)}</td>
+                      <td>{formatCurrency(month.expenses)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
               <dl className="chart-insights">
                 <div>
                   <dt>Average in over {flowMonths} months</dt>

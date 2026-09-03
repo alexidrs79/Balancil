@@ -51,13 +51,18 @@ export function NotFoundPage() {
                 <Link className="button" to="/">
                   Back to home
                 </Link>
-                <Link className="landing-text-link" to="/login">
-                  Sign in
+                <Link className="landing-text-link" to="/register">
+                  Create an account
                   <ArrowRight size={16} aria-hidden="true" />
                 </Link>
               </>
             )}
           </div>
+          <nav className="error-help-links" aria-label="Helpful links">
+            {!isAuthenticated ? <Link to="/login">Sign in</Link> : null}
+            <Link to={isAuthenticated ? '/app/help/privacy' : '/privacy'}>Privacy</Link>
+            <Link to={isAuthenticated ? '/app/help/terms' : '/terms'}>Terms</Link>
+          </nav>
         </section>
       </div>
     </main>

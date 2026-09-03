@@ -311,11 +311,22 @@ export function ForgotPasswordPage() {
         </p>
       ) : (
         <form className="auth-form" onSubmit={submit}>
-          <label>
-            Email address
-            <input type="email" autoComplete="email" {...register('email')} />
-            {errors.email && <small className="field-error">{errors.email.message}</small>}
-          </label>
+          <div className="auth-field">
+            <label htmlFor="forgot-email">Email address</label>
+            <input
+              id="forgot-email"
+              type="email"
+              autoComplete="email"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'forgot-email-error' : undefined}
+              {...register('email')}
+            />
+            {errors.email && (
+              <small className="field-error" id="forgot-email-error">
+                {errors.email.message}
+              </small>
+            )}
+          </div>
           {apiError ? (
             <p className="form-error" role="alert">
               {apiError}
@@ -367,22 +378,40 @@ export function ResetPasswordPage() {
   return (
     <AuthShell title="Choose a new password" description={`Resetting the password for ${email}.`}>
       <form className="auth-form" onSubmit={submit}>
-        <label>
-          New password
-          <input type="password" autoComplete="new-password" {...register('password')} />
-          {errors.password && <small className="field-error">{errors.password.message}</small>}
-        </label>
-        <label>
-          Confirm password
+        <div className="auth-field">
+          <label htmlFor="reset-password">New password</label>
           <input
+            id="reset-password"
             type="password"
             autoComplete="new-password"
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? 'reset-password-error' : undefined}
+            {...register('password')}
+          />
+          {errors.password && (
+            <small className="field-error" id="reset-password-error">
+              {errors.password.message}
+            </small>
+          )}
+        </div>
+        <div className="auth-field">
+          <label htmlFor="reset-password-confirmation">Confirm password</label>
+          <input
+            id="reset-password-confirmation"
+            type="password"
+            autoComplete="new-password"
+            aria-invalid={Boolean(errors.passwordConfirmation)}
+            aria-describedby={
+              errors.passwordConfirmation ? 'reset-password-confirmation-error' : undefined
+            }
             {...register('passwordConfirmation')}
           />
           {errors.passwordConfirmation && (
-            <small className="field-error">{errors.passwordConfirmation.message}</small>
+            <small className="field-error" id="reset-password-confirmation-error">
+              {errors.passwordConfirmation.message}
+            </small>
           )}
-        </label>
+        </div>
         {apiError ? (
           <p className="form-error" role="alert">
             {apiError}

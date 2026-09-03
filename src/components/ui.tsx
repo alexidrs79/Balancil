@@ -314,6 +314,30 @@ export function EmptyState({
   );
 }
 
+export function ErrorState({
+  title,
+  description,
+  onRetry,
+}: {
+  title: string;
+  description: string;
+  onRetry?: () => void;
+}) {
+  return (
+    <Card className="error-state" role="alert">
+      <div>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+      {onRetry ? (
+        <Button variant="secondary" onClick={onRetry}>
+          Try again
+        </Button>
+      ) : null}
+    </Card>
+  );
+}
+
 export function Modal({
   open,
   onClose,
@@ -387,7 +411,13 @@ export function Modal({
   }, [open]);
   if (!open) return null;
   return (
-    <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
+    <div
+      className="modal-backdrop"
+      role="presentation"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <section
         ref={dialogRef}
         className={cn('modal', size === 'sm' && 'modal-sm', className)}
@@ -396,7 +426,6 @@ export function Modal({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
-        onMouseDown={(event) => event.stopPropagation()}
       >
         <header>
           <div>

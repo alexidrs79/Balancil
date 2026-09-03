@@ -2,9 +2,9 @@ import { ArrowRight, Pencil, Plus, Trash } from '../../components/icons';
 import { useState } from 'react';
 import {
   Button,
-  Card,
   ConfirmDialog,
   EmptyState,
+  ErrorState,
   LedgerList,
   LedgerRow,
   PageHeader,
@@ -111,7 +111,7 @@ function AccountLedger({
 }
 
 export function AccountsPage() {
-  const { data: accounts = [], isLoading, isError } = useAccounts();
+  const { data: accounts = [], isLoading, isError, refetch } = useAccounts();
   // Only the handful shown under "Recent activity"; the ledger lives on its own page.
   const { data: recentPage } = useTransactions({ perPage: 6 });
   const recentTransactions = recentPage?.data ?? [];
@@ -206,10 +206,11 @@ export function AccountsPage() {
   if (isError) {
     return (
       <div className="page product-page accounts-page">
-        <Card className="error-state" role="alert">
-          <h2>Accounts are unavailable</h2>
-          <p>Try again in a moment.</p>
-        </Card>
+        <ErrorState
+          title="Accounts are unavailable"
+          description="Try again in a moment."
+          onRetry={() => void refetch()}
+        />
       </div>
     );
   }
@@ -222,39 +223,41 @@ export function AccountsPage() {
         description="Balances and account details in one place."
       />
 
-      <section
-        className="financial-summary balancil-box accounts-summary"
-        aria-label="Accounts summary"
-      >
-        <div>
-          <span>Combined balance</span>
-          <strong>
-            <AnimatedValue value={combined} format={formatCurrency} />
-          </strong>
-          <small>
-            {retainedShare}% remains after liabilities · {accounts.length}{' '}
-            {accounts.length === 1 ? 'account' : 'accounts'}
-          </small>
-        </div>
-        <dl>
+      {accounts.length ? (
+        <section
+          className="financial-summary balancil-box accounts-summary"
+          aria-label="Accounts summary"
+        >
           <div>
-            <dt>Assets</dt>
-            <dd>
-              <AnimatedValue value={assets} format={formatCurrency} />
-            </dd>
-            <small>Positive account balances</small>
-          </div>
-          <div>
-            <dt>Liabilities</dt>
-            <dd className="negative">
-              <AnimatedValue value={liabilities} format={formatCurrency} />
-            </dd>
+            <span>Combined balance</span>
+            <strong>
+              <AnimatedValue value={combined} format={formatCurrency} />
+            </strong>
             <small>
-              {creditCount} {creditCount === 1 ? 'account' : 'accounts'} carrying a balance
+              {retainedShare}% remains after liabilities · {accounts.length}{' '}
+              {accounts.length === 1 ? 'account' : 'accounts'}
             </small>
           </div>
-        </dl>
-      </section>
+          <dl>
+            <div>
+              <dt>Assets</dt>
+              <dd>
+                <AnimatedValue value={assets} format={formatCurrency} />
+              </dd>
+              <small>Positive account balances</small>
+            </div>
+            <div>
+              <dt>Liabilities</dt>
+              <dd className="negative">
+                <AnimatedValue value={liabilities} format={formatCurrency} />
+              </dd>
+              <small>
+                {creditCount} {creditCount === 1 ? 'account' : 'accounts'} carrying a balance
+              </small>
+            </div>
+          </dl>
+        </section>
+      ) : null}
 
       {!accounts.length ? (
         <EmptyState

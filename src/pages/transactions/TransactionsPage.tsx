@@ -14,9 +14,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
   AnimatedValue,
-  Card,
   ConfirmDialog,
   EmptyState,
+  ErrorState,
   PageHeader,
   Select,
   Skeleton,
@@ -97,7 +97,7 @@ export function TransactionsPage() {
     }),
     [filters, debouncedSearch, dateRangeInvalid, page],
   );
-  const { data: ledger, isLoading, isError } = useTransactions(query);
+  const { data: ledger, isLoading, isError, refetch } = useTransactions(query);
   const visible = ledger?.data ?? [];
   const meta = ledger?.meta;
   const summary = ledger?.summary;
@@ -213,48 +213,66 @@ export function TransactionsPage() {
       </section>
 
       <section className="transaction-toolbar section-open" aria-label="Transaction controls">
-        <div className="transaction-toolbar-primary">
-          <label className="field-control transaction-search-field">
-            <span>Filter ledger</span>
-            <span className="transaction-search input-shell">
-              <Search size={17} aria-hidden="true" />
-              <input
-                ref={searchInputRef}
-                placeholder="Merchant or description…"
-                value={filters.search}
-                onChange={(event) => updateFilter('search', event.target.value)}
-              />
-            </span>
-          </label>
-          <label className="field-control">
-            <span>Type</span>
-            <Select
-              value={filters.type}
-              onChange={(event) =>
-                updateFilter('type', event.target.value as TransactionFilters['type'])
-              }
-            >
-              <option value="">Income & expenses</option>
-              <option value="income">Income</option>
-              <option value="expense">Expenses</option>
-            </Select>
-          </label>
-          <label className="field-control">
-            <span>Sort</span>
-            <Select
-              value={filters.sort}
-              onChange={(event) =>
-                updateFilter('sort', event.target.value as TransactionFilters['sort'])
-              }
-            >
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-              <option value="highest">Highest amount</option>
-              <option value="lowest">Lowest amount</option>
-            </Select>
-          </label>
+        <div className="transaction-toolbar-primary-actions">
+          <div className="transaction-toolbar-primary">
+            <label className="field-control transaction-search-field">
+              <span>Filter ledger</span>
+              <span className="transaction-search input-shell">
+                <Search size={17} aria-hidden="true" />
+                <input
+                  ref={searchInputRef}
+                  placeholder="Merchant or description…"
+                  value={filters.search}
+                  onChange={(event) => updateFilter('search', event.target.value)}
+                />
+              </span>
+            </label>
+            <label className="field-control">
+              <span>Type</span>
+              <Select
+                value={filters.type}
+                onChange={(event) =>
+                  updateFilter('type', event.target.value as TransactionFilters['type'])
+                }
+              >
+                <option value="">Income & expenses</option>
+                <option value="income">Income</option>
+                <option value="expense">Expenses</option>
+              </Select>
+            </label>
+            <label className="field-control">
+              <span>Sort</span>
+              <Select
+                value={filters.sort}
+                onChange={(event) =>
+                  updateFilter('sort', event.target.value as TransactionFilters['sort'])
+                }
+              >
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="highest">Highest amount</option>
+                <option value="lowest">Lowest amount</option>
+              </Select>
+            </label>
+          </div>
+          {activeAccounts.length > 0 ? (
+            <Button className="inline-action" onClick={() => setEditing(null)}>
+              <Plus size={16} />
+              Add transaction
+            </Button>
+          ) : (
+            <Link className="button inline-action" to="/app/accounts">
+              <Plus size={16} />
+              Add account first
+            </Link>
+          )}
         </div>
-        <div className="transaction-toolbar-actions">
+        <div
+          className="transaction-toolbar-actions"
+          role="group"
+          aria-label="Secondary transaction tools"
+        >
+          <span className="transaction-toolbar-secondary-label">More tools</span>
           <Button
             variant="secondary"
             className="inline-action filter-toggle is-always"
@@ -308,17 +326,6 @@ export function TransactionsPage() {
             <Upload size={16} />
             Import
           </Button>
-          {activeAccounts.length > 0 ? (
-            <Button variant="secondary" className="inline-action" onClick={() => setEditing(null)}>
-              <Plus size={16} />
-              Add transaction
-            </Button>
-          ) : (
-            <Link className="button button-secondary inline-action" to="/app/accounts">
-              <Plus size={16} />
-              Add account first
-            </Link>
-          )}
         </div>
       </section>
 
@@ -346,10 +353,11 @@ export function TransactionsPage() {
           ))}
         </div>
       ) : isError ? (
-        <Card className="error-state" role="alert">
-          <h2>Transactions are unavailable</h2>
-          <p>Try again in a moment.</p>
-        </Card>
+        <ErrorState
+          title="Transactions are unavailable"
+          description="Try again in a moment."
+          onRetry={() => void refetch()}
+        />
       ) : !ledgerTotal ? (
         <EmptyState
           title="Record your first transaction"

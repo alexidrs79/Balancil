@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
-  Card,
+  ErrorState,
   PageHeader,
   Progress,
   Skeleton,
@@ -42,7 +42,7 @@ export function AnalyticsPage() {
       : {
           months: Number(rangePreset),
         };
-  const { data: analytics, isLoading, isError } = useAnalytics(analyticsRange);
+  const { data: analytics, isLoading, isError, refetch } = useAnalytics(analyticsRange);
   const { data: accounts = [] } = useAccounts();
   const { data: categories = [] } = useCategories();
 
@@ -58,10 +58,11 @@ export function AnalyticsPage() {
   if (isError || !analytics) {
     return (
       <div className="page product-page analytics-page">
-        <Card className="error-state" role="alert">
-          <h2>Analytics are unavailable</h2>
-          <p>Try again in a moment.</p>
-        </Card>
+        <ErrorState
+          title="Analytics are unavailable"
+          description="Try again in a moment."
+          onRetry={() => void refetch()}
+        />
       </div>
     );
   }
@@ -196,12 +197,13 @@ export function AnalyticsPage() {
           detail={rangeLabel}
           action={
             <span className="chart-legend">
-              <i className="income" /> Income <i className="expense" /> Expenses
+              <span className="income" aria-hidden="true" /> Income{' '}
+              <span className="expense" aria-hidden="true" /> Expenses
             </span>
           }
         />
         <div className="chart-frame">
-          <div className="analytics-primary-chart">
+          <div className="analytics-primary-chart" aria-hidden="true">
             {hasTrendActivity ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -263,6 +265,25 @@ export function AnalyticsPage() {
               </div>
             )}
           </div>
+          <table className="sr-only">
+            <caption>Income and expenses by month for {rangeLabel}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">Income</th>
+                <th scope="col">Expenses</th>
+              </tr>
+            </thead>
+            <tbody>
+              {trendData.map((month) => (
+                <tr key={month.period}>
+                  <th scope="row">{formatAnalyticsMonth(month.period, true)}</th>
+                  <td>{formatCurrency(month.income)}</td>
+                  <td>{formatCurrency(month.expenses)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <dl className="chart-insights">
             <div>
               <dt>Average spend over {monthCount} months</dt>

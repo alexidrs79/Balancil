@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Budget,
@@ -38,17 +38,13 @@ export function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const sidebarRef = useRef<HTMLElement>(null);
   const mobileOpen = sidebarPath === location.pathname;
   const closeSidebar = () => {
     setSidebarPath(null);
     setAccountMenuOpen(false);
   };
-  const activeRoute =
-    [...navigation, { to: '/app/settings', label: 'Settings' }, { to: '/app/help', label: 'Help' }]
-      .sort((a, b) => b.to.length - a.to.length)
-      .find((item) =>
-        item.to === '/app' ? location.pathname === item.to : location.pathname.startsWith(item.to),
-      )?.label ?? 'Not found';
+  const openSidebar = () => setSidebarPath(location.pathname);
 
   const signOut = async () => {
     await logout();
@@ -57,8 +53,39 @@ export function AppLayout() {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    if (!mobileOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const focusFrame = window.requestAnimationFrame(() => sidebarRef.current?.focus());
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeSidebar();
+        return;
+      }
+      if (event.key !== 'Tab' || !sidebarRef.current) return;
+      const focusable = Array.from(
+        sidebarRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable.at(-1)!;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
     return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
+      if (previouslyFocused && document.contains(previouslyFocused)) previouslyFocused.focus();
     };
   }, [mobileOpen]);
 
@@ -81,7 +108,15 @@ export function AppLayout() {
 
   return (
     <div className="app-shell">
-      <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
+      <a className="skip-link" href="#app-content">
+        Skip to content
+      </a>
+      <aside
+        ref={sidebarRef}
+        className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}
+        aria-label="App navigation"
+        tabIndex={mobileOpen ? -1 : undefined}
+      >
         <div className="brand-row">
           <NavLink to="/app" className="brand">
             <Logo />
@@ -169,11 +204,12 @@ export function AppLayout() {
             variant="ghost"
             className="menu-button"
             aria-label="Open navigation"
-            onClick={() => setSidebarPath(location.pathname)}
+            aria-expanded={mobileOpen}
+            onClick={openSidebar}
           >
             <Menu size={21} />
           </Button>
-          <strong className="topbar-route">{activeRoute}</strong>
+          <span className="topbar-context">Personal ledger</span>
           <Button
             className="topbar-action"
             onClick={() => navigate('/app/transactions', { state: { createTransaction: true } })}
@@ -182,7 +218,11 @@ export function AppLayout() {
             <span>Add transaction</span>
           </Button>
         </header>
-        <main className="route-stage" key={`${location.pathname}${location.search}`}>
+        <main
+          id="app-content"
+          className="route-stage"
+          key={`${location.pathname}${location.search}`}
+        >
           <Outlet />
         </main>
         <nav className="mobile-nav" aria-label="Mobile navigation">
@@ -207,7 +247,7 @@ export function AppLayout() {
                 ? 'active'
                 : undefined
             }
-            onClick={() => setSidebarPath(location.pathname)}
+            onClick={openSidebar}
             aria-label="Open more navigation"
           >
             <Menu size={20} />

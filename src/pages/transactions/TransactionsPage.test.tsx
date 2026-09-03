@@ -94,6 +94,17 @@ beforeEach(() => {
 });
 
 describe('TransactionsPage', () => {
+  it('separates the primary add action from labelled secondary tools', async () => {
+    renderPage();
+    await screen.findByText('Corner Store');
+
+    expect(screen.getByRole('button', { name: 'Add transaction' })).toHaveClass('button');
+    const secondaryTools = screen.getByRole('group', { name: 'Secondary transaction tools' });
+    expect(secondaryTools).toHaveTextContent('More filters');
+    expect(secondaryTools).toHaveTextContent('Manage categories');
+    expect(secondaryTools).not.toHaveTextContent('Add transaction');
+  });
+
   it('renders the page the API returned and maps the paginator meta', async () => {
     renderPage();
 

@@ -327,17 +327,22 @@ export function LedgerBasicsPage() {
         </p>
       </section>
       <section className="ledger-guide-grid" aria-label="Balancil ledger guide">
-        {ledgerGuides.map((guide) => (
-          <article className="balancil-box" key={guide.number}>
-            <span>{guide.number}</span>
-            <h2>{guide.title}</h2>
-            <p>{guide.body}</p>
-            <Link to={guide.to}>
-              {guide.action}
-              <ChevronRight size={15} />
-            </Link>
-          </article>
-        ))}
+        <h2 className="sr-only">Using your ledger</h2>
+        <ol>
+          {ledgerGuides.map((guide) => (
+            <li key={guide.number}>
+              <span>{guide.number}</span>
+              <div>
+                <h3>{guide.title}</h3>
+                <p>{guide.body}</p>
+              </div>
+              <Link to={guide.to}>
+                {guide.action}
+                <ChevronRight size={15} />
+              </Link>
+            </li>
+          ))}
+        </ol>
       </section>
       <aside className="ledger-help-note">
         <strong>Need policy details?</strong>

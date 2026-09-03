@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Button,
-  Card,
   ConfirmDialog,
   EmptyState,
+  ErrorState,
   Modal,
   PageHeader,
   Progress,
@@ -37,7 +37,7 @@ function formatDeadline(value: string) {
 }
 
 export function GoalsPage() {
-  const { data = [], isLoading, isError } = useGoals();
+  const { data = [], isLoading, isError, refetch } = useGoals();
   const mutations = useGoalMutations();
   const notify = useToast();
   const [open, setOpen] = useState(false);
@@ -133,10 +133,11 @@ export function GoalsPage() {
             ))}
           </div>
         ) : (
-          <Card className="error-state" role="alert">
-            <h2>Goals are unavailable</h2>
-            <p>Refresh and try again.</p>
-          </Card>
+          <ErrorState
+            title="Goals are unavailable"
+            description="Please try again."
+            onRetry={() => void refetch()}
+          />
         )}
       </div>
     );
@@ -150,46 +151,48 @@ export function GoalsPage() {
         description="Progress, deadlines, and remaining amounts."
       />
 
-      <section
-        className="financial-summary balancil-box goals-header-stat"
-        aria-label="Goals summary"
-      >
-        <div>
-          <span>Saved toward goals</span>
-          <strong>
-            <AnimatedValue value={saved} format={formatCurrency} />
-          </strong>
-          <div className="budget-summary-progress">
-            <Progress value={overallProgress} label="Combined goal progress" />
-            <small>{overallProgress}% of combined targets</small>
-          </div>
-        </div>
-        <dl>
+      {data.length ? (
+        <section
+          className="financial-summary balancil-box goals-header-stat"
+          aria-label="Goals summary"
+        >
           <div>
-            <dt>Combined target</dt>
-            <dd>
-              <AnimatedValue value={target} format={formatCurrency} />
-            </dd>
-            <small>
-              Across {data.length} {data.length === 1 ? 'goal' : 'goals'}
-            </small>
+            <span>Saved toward goals</span>
+            <strong>
+              <AnimatedValue value={saved} format={formatCurrency} />
+            </strong>
+            <div className="budget-summary-progress">
+              <Progress value={overallProgress} label="Combined goal progress" />
+              <small>{overallProgress}% of combined targets</small>
+            </div>
           </div>
-          <div>
-            <dt>Still to fund</dt>
-            <dd>
-              <AnimatedValue value={remaining} format={formatCurrency} />
-            </dd>
-            <small>{100 - overallProgress}% left to save</small>
-          </div>
-          <div>
-            <dt>Active goals</dt>
-            <dd>
-              <AnimatedValue value={data.length} />
-            </dd>
-            <small>Currently being tracked</small>
-          </div>
-        </dl>
-      </section>
+          <dl>
+            <div>
+              <dt>Combined target</dt>
+              <dd>
+                <AnimatedValue value={target} format={formatCurrency} />
+              </dd>
+              <small>
+                Across {data.length} {data.length === 1 ? 'goal' : 'goals'}
+              </small>
+            </div>
+            <div>
+              <dt>Still to fund</dt>
+              <dd>
+                <AnimatedValue value={remaining} format={formatCurrency} />
+              </dd>
+              <small>{100 - overallProgress}% left to save</small>
+            </div>
+            <div>
+              <dt>Active goals</dt>
+              <dd>
+                <AnimatedValue value={data.length} />
+              </dd>
+              <small>Currently being tracked</small>
+            </div>
+          </dl>
+        </section>
+      ) : null}
 
       {!data.length ? (
         <EmptyState

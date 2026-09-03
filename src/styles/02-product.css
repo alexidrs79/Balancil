@@ -17,7 +17,7 @@
 }
 
 .analytics-summary dl {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .analytics-trend-section {
@@ -326,6 +326,13 @@
   gap: var(--space-3);
 }
 
+.transaction-toolbar-primary-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-3);
+}
+
 .transaction-toolbar-actions,
 .transaction-pagination > div,
 .row-actions {
@@ -339,6 +346,16 @@
   align-items: flex-end;
   justify-content: flex-end;
   gap: var(--space-2);
+}
+
+.transaction-toolbar-secondary-label {
+  margin-right: auto;
+  align-self: center;
+  color: var(--muted);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .recurring-due-panel {
