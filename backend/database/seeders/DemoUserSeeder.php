@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Services\TransactionService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DemoUserSeeder extends Seeder
@@ -21,6 +22,21 @@ class DemoUserSeeder extends Seeder
             ['email' => 'alex@balancil.app'],
             ['name' => 'Alex Morgan', 'password' => Hash::make('balancil123')]
         );
+
+        // The owned scope is fail-closed, so with no authenticated user every
+        // check below reads as empty and TransactionService cannot resolve the
+        // demo categories. Seed as the demo user rather than around the scope.
+        Auth::setUser($user);
+
+        try {
+            $this->seedLedger($user);
+        } finally {
+            Auth::forgetUser();
+        }
+    }
+
+    private function seedLedger(User $user): void
+    {
         if ($user->preferences()->doesntExist()) {
             $user->preferences()->create(['currency' => 'USD']);
         }
