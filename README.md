@@ -1,11 +1,22 @@
 # Balancil
 
+[![CI](https://github.com/alexidrs79/Balancil/actions/workflows/ci.yml/badge.svg)](https://github.com/alexidrs79/Balancil/actions/workflows/ci.yml)
+
 Balancil is a private personal ledger: accounts, transactions, budgets, savings
 goals, and spending trends. You enter the records. It does not connect to banks,
 import feeds, or move money.
 
 The React app talks to a Laravel REST API. Each account is isolated. Sessions use
 Sanctum bearer tokens.
+
+![The Balancil overview page](docs/dashboard.png)
+
+Every figure in these screenshots comes from the local demo seed described below,
+not from a real ledger.
+
+| Ledger                                          | Analytics                                 |
+| ----------------------------------------------- | ----------------------------------------- |
+| ![The transactions page](docs/transactions.png) | ![The analytics page](docs/analytics.png) |
 
 ## What it is (and is not)
 
