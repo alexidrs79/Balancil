@@ -2,12 +2,19 @@
 
 [![CI](https://github.com/alexidrs79/Balancil/actions/workflows/ci.yml/badge.svg)](https://github.com/alexidrs79/Balancil/actions/workflows/ci.yml)
 
+**Live app:** [https://balancil.vercel.app](https://balancil.vercel.app)  
+**API:** [https://balancil-api.onrender.com](https://balancil-api.onrender.com)
+
 Balancil is a private personal ledger: accounts, transactions, budgets, savings
 goals, and spending trends. You enter the records. It does not connect to banks,
 import feeds, or move money.
 
 The React app talks to a Laravel REST API. Each account is isolated. Sessions use
 Sanctum bearer tokens.
+
+> The Render API sleeps on the free plan. The first request after idle can take
+> about a minute. Create your own account on the live demo — do not use any
+> local seed user.
 
 ![The Balancil overview page](docs/dashboard.png)
 
@@ -197,8 +204,8 @@ the demo; document that limitation). Never run `db:seed` on the public host.
 
    | Key | Value |
    | --- | --- |
-   | `VITE_SITE_URL` | `https://<your-app>.vercel.app` (no trailing slash) |
-   | `VITE_API_URL` | `https://<your-api>.onrender.com/api` |
+   | `VITE_SITE_URL` | `https://balancil.vercel.app` (no trailing slash) |
+   | `VITE_API_URL` | `https://balancil-api.onrender.com/api` |
 
 4. **Back to Render**  
    Set `FRONTEND_URL` to the real Vercel origin (no trailing slash) and
