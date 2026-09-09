@@ -16,7 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust only proxies named by the deployment. Trusting every caller
         // allows a direct client to spoof forwarded IP and scheme headers.
-        $middleware->trustProxies(at: env('TRUSTED_PROXIES'));
+        // Render sits behind its load balancer: set TRUSTED_PROXIES=* there.
+        // Never set FRONTEND_URL=* (CORS). Empty/local leaves proxies untrusted.
+        $trustedProxies = env('TRUSTED_PROXIES');
+        $middleware->trustProxies(
+            at: ($trustedProxies === null || $trustedProxies === '') ? null : $trustedProxies,
+        );
         $middleware->append(SecurityHeaders::class);
         $middleware->redirectGuestsTo(
             fn (Request $request) => $request->is('api/*') ? null : rtrim((string) config('app.frontend_url'), '/').'/login'

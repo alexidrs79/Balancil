@@ -31,11 +31,18 @@ import { TransferModal } from './TransferModal';
 /**
  * Spells out how a stored balance was reached, so the number is never a mystery.
  * Accounts with no recorded movement yet still read as their opening figure.
+ * netActivity of 0 is real data — do not treat it as missing (0 is falsy in JS).
  */
-function balanceBreakdown(account: Account) {
-  if (account.openingBalance === undefined || !account.netActivity) return null;
-  const sign = account.netActivity > 0 ? '+' : '−';
-  return `Opening ${formatCurrency(account.openingBalance)} · ${sign}${formatCurrency(Math.abs(account.netActivity))} recorded`;
+export function balanceBreakdown(account: Account) {
+  if (account.openingBalance == null || account.netActivity == null) return null;
+  const opening = Number(account.openingBalance);
+  const activity = Number(account.netActivity);
+  if (!Number.isFinite(opening) || !Number.isFinite(activity)) return null;
+  if (activity === 0) {
+    return `Opening ${formatCurrency(opening)}`;
+  }
+  const sign = activity > 0 ? '+' : '−';
+  return `Opening ${formatCurrency(opening)} · ${sign}${formatCurrency(Math.abs(activity))} recorded`;
 }
 
 function AccountLedger({

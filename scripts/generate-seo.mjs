@@ -12,6 +12,10 @@ if (!isPublicOrigin) {
   process.stderr.write(
     'SEO: set VITE_SITE_URL to generate production canonical URLs and sitemap.xml.\n',
   );
+  // Vercel / CI production builds must not ship example.com canonicals.
+  if (process.env.VERCEL || process.env.CI_REQUIRE_SITE_URL === '1') {
+    process.exit(1);
+  }
   process.exit(0);
 }
 

@@ -34,8 +34,9 @@ not from a real ledger.
 - React 19, TypeScript, Vite, React Router
 - TanStack Query and Axios
 - React Hook Form, Zod, Recharts
-- Laravel 13, Sanctum bearer tokens, SQLite by default
+- Laravel 13, Sanctum bearer tokens, SQLite locally / Postgres on Render
 - Vitest, Testing Library, PHPUnit
+- Hiring demo: Vite on Vercel, Laravel Docker API on Render
 
 ## Run it locally
 
@@ -125,34 +126,118 @@ A production build should set `VITE_API_URL` to the public API origin and `VITE_
   transactions and transfers behind it.
 - Settings can delete the entire Balancil account and its ledger rows.
 
-## Production (go live)
+## Hiring demo deploy (Vercel + Render)
 
-1. Provision HTTPS for the frontend and the API. Set `APP_ENV=production`,
-   `APP_DEBUG=false`, `APP_URL` and `FRONTEND_URL` to those https origins.
-2. Generate a new `APP_KEY`. Never reuse a key from git or a laptop.
-3. Point `MAIL_*` at a real mailer. Password reset will not work on the log driver.
-4. SQLite is acceptable only for a tiny private launch with file backups. Prefer
-   Postgres or MySQL (`DB_CONNECTION`) before you have more than one server.
-5. Run `php artisan migrate --force` **without** `--seed`.
-6. Profile images stay on Laravel’s private disk and are returned through
-   one-hour signed URLs. Do not expose `storage/app/private`.
-7. Build with `VITE_SITE_URL=https://your-domain.example npm run build`; this
-   writes production canonical URLs and `sitemap.xml`. Host `dist/` behind HTTPS.
-   Configure a SPA fallback so `/login`, `/privacy`, `/app/*` serve `index.html`
-   (`public/_redirects` is for Netlify). Set `VITE_API_URL` at build time.
-8. CORS allows only `FRONTEND_URL`. A `*` origin is ignored. Set
-   `TRUSTED_PROXIES` to the load balancer’s exact IP/CIDR list; never use `*`.
-9. Reproduce the security headers in `public/_headers` if the host does not read
-   Netlify header files. Add HSTS after every route works over HTTPS.
-10. Run Laravel’s scheduler every minute so recurring drafts are generated:
-    `* * * * * cd /path/to/backend && php artisan schedule:run >> /dev/null 2>&1`.
-11. Run `php artisan ledger:reconcile` on a schedule as well. Investigate before
-    reaching for `--fix`: drift means something upstream wrote a balance wrongly.
-12. Smoke: register → add account → add transaction → see it on overview →
-    change password → sign out → sign in → forgot password email → export CSV →
-    re-import it and confirm nothing doubles → delete account on a throwaway user.
+Two hosts: **Vite frontend on Vercel**, **Laravel API on Render**. Do not put
+Laravel on Vercel. Do not rewrite the API in Node. Do not use ephemeral SQLite
+on free Render (the disk is wiped). Use Render Postgres.
 
-Health: `GET /up` (Laravel) and `GET /` on the API returns `{ "ok": true, "name": "Balancil" }`.
+Signup email verification is **not** enabled — register works without a mail
+domain. With `MAIL_MAILER=log`, password-reset emails will not send (fine for
+the demo; document that limitation). Never run `db:seed` on the public host.
+
+### Dashboard order (paste URLs into the other host)
+
+1. **Render — Postgres**  
+   Create a PostgreSQL database. Copy the **External Database URL** (or Internal
+   URL if the web service is in the same region). You will paste it as
+   `DATABASE_URL` on the API service.
+
+2. **Render — Web service (API first)**  
+   - Runtime: **Docker**  
+   - Root Directory: `backend`  
+   - Dockerfile Path: `./Dockerfile`  
+   - Health Check Path: `/up`  
+   - Pre-Deploy / release command: `php artisan migrate --force --no-interaction`  
+     (no `db:seed`)  
+   - Generate a fresh key locally (do not reuse a laptop key):
+
+     ```bash
+     cd backend && php artisan key:generate --show
+     ```
+
+   Set these env vars on the web service:
+
+   | Key | Value |
+   | --- | --- |
+   | `APP_NAME` | `Balancil` |
+   | `APP_ENV` | `production` |
+   | `APP_DEBUG` | `false` |
+   | `APP_KEY` | output of `key:generate --show` |
+   | `APP_URL` | `https://<your-api>.onrender.com` (no trailing slash) |
+   | `FRONTEND_URL` | temporary placeholder `https://localhost` until Vercel exists, then update |
+   | `TRUSTED_PROXIES` | `*` (Render’s load balancer; required for HTTPS) |
+   | `DB_CONNECTION` | `pgsql` |
+   | `DB_SSLMODE` | `require` |
+   | `DATABASE_URL` | Render Postgres URL (entrypoint also maps this to `DB_URL`) |
+   | `SESSION_DRIVER` | `database` |
+   | `SESSION_SECURE_COOKIE` | `true` |
+   | `CACHE_STORE` | `database` |
+   | `QUEUE_CONNECTION` | `database` |
+   | `MAIL_MAILER` | `log` |
+   | `MAIL_FROM_ADDRESS` | `noreply@balancil.app` |
+   | `SKIP_MIGRATE` | `1` if Pre-Deploy already runs migrate (avoids double migrate) |
+
+   Never set `FRONTEND_URL=*`. CORS allows only that one origin.
+
+   Deploy, then confirm:
+
+   - `GET https://<api>.onrender.com/up` → healthy  
+   - `GET https://<api>.onrender.com/` → `{"ok":true,"name":"Balancil"}`
+
+3. **Vercel — Frontend**  
+   - Framework Preset: **Vite**  
+   - Root Directory: `.` (repo root)  
+   - Build Command: `npm run build`  
+   - Output Directory: `dist`  
+   - Node.js: **22.x** (`package.json` engines + Vercel project setting)  
+   - SPA fallback is in `vercel.json` (rewrites → `index.html`)
+
+   Build env:
+
+   | Key | Value |
+   | --- | --- |
+   | `VITE_SITE_URL` | `https://<your-app>.vercel.app` (no trailing slash) |
+   | `VITE_API_URL` | `https://<your-api>.onrender.com/api` |
+
+4. **Back to Render**  
+   Set `FRONTEND_URL` to the real Vercel origin (no trailing slash) and
+   **redeploy the API** so CORS and password-reset links match. If the Vercel
+   URL changes again, update `FRONTEND_URL` and redeploy the API.
+
+5. **Smoke (real register, no seed)**  
+   register → add account → add transaction → see it on overview → sign out →
+   sign in. Skip forgot-password while `MAIL_MAILER=log`. Do **not** seed the
+   demo-user password on the public host.
+
+### Scheduler on the free demo
+
+`routes/console.php` schedules `recurring:generate-drafts` (hourly) and
+`ledger:reconcile` (daily). Free Render web services do **not** run cron by
+default, so recurring drafts will not generate until something runs
+`php artisan schedule:run` every minute (Render Cron Job, or a paid always-on
+worker). Document that limitation for the hiring demo.
+
+Optional Blueprint: `render.yaml` at the repo root. Prefer the dashboard steps
+above if your plan’s free Postgres / Pre-Deploy options differ.
+
+### Production checklist (any host)
+
+1. HTTPS on frontend and API. `APP_ENV=production`, `APP_DEBUG=false`, fresh
+   `APP_KEY`, `APP_URL` + `FRONTEND_URL` as https origins (no trailing slash).
+2. Real `MAIL_*` only if password reset must work; otherwise keep `log` and
+   say reset emails will not send.
+3. Postgres (or MySQL) on a durable disk — not ephemeral SQLite on Render free.
+4. `php artisan migrate --force` **without** `--seed`.
+5. Profile images stay on the private disk behind signed URLs.
+6. Build with `VITE_SITE_URL` + `VITE_API_URL`. SPA fallback for `/login`,
+   `/privacy`, `/app/*` (`vercel.json` on Vercel; `public/_redirects` for Netlify).
+7. CORS = `FRONTEND_URL` only. `TRUSTED_PROXIES=*` on Render; never
+   `FRONTEND_URL=*`.
+8. Security headers (`vercel.json` / `public/_headers`) and HSTS after HTTPS works.
+9. Scheduler for recurring drafts + `ledger:reconcile` when the host allows cron.
+
+Health: `GET /up` and `GET /` → `{ "ok": true, "name": "Balancil" }`.
 
 ## Commands
 
@@ -209,8 +294,9 @@ backend/
 
 ## Day-two (not this launch)
 
-httpOnly cookie sessions, 2FA, signup email verification, bank aggregation,
-Postgres as the default, error monitoring, automated encrypted backups.
+httpOnly cookie sessions, 2FA, signup email verification (not required today —
+register works without a mail domain), bank aggregation, error monitoring,
+automated encrypted backups, and a real mailer for password reset.
 
 ## License
 
