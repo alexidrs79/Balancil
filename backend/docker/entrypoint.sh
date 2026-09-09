@@ -25,6 +25,8 @@ fi
 
 php artisan config:cache
 php artisan route:cache
+# API-only apps may omit Blade views; view:cache requires the directory.
+mkdir -p resources/views
 php artisan view:cache
 
 exec "$@"
